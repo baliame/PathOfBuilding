@@ -125,6 +125,12 @@ local skills, mod, flag, skill = ...
 
 #skill SupportImpale
 	statMap = {
+		["attacks_impale_on_hit_%_chance"] = {
+			mod("ImpaleChance", "BASE", nil, ModFlag.Attack),
+		},
+		["impale_debuff_effect_+%"] = {
+			mod("ImpaleEffect", "INC", nil),
+		},
 		["impale_support_physical_damage_+%_final"] = {
 			mod("PhysicalDamage", "MORE", nil),
 		},
@@ -152,7 +158,7 @@ local skills, mod, flag, skill = ...
 #mods
 
 #skill SupportMultiTrap
-	statMap = {	
+	statMap = {
 		["support_multithrow_damage_+%_final"] = {
 			mod("Damage", "MORE", nil),
 		},

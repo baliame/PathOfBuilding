@@ -112,11 +112,11 @@ local function doActorAttribsPoolsConditions(env, actor)
 			condList["DualWieldingClaws"] = true
 		end
 	end
-	if env.mode_combat then		
+	if env.mode_combat then
 		if not modDB:Flag(nil, "NeverCrit") then
 			condList["CritInPast8Sec"] = true
 		end
-		if not actor.mainSkill.skillData.triggered and not actor.mainSkill.skillFlags.trap and not actor.mainSkill.skillFlags.mine and not actor.mainSkill.skillFlags.totem then 
+		if not actor.mainSkill.skillData.triggered and not actor.mainSkill.skillFlags.trap and not actor.mainSkill.skillFlags.mine and not actor.mainSkill.skillFlags.totem then
 			if actor.mainSkill.skillFlags.attack then
 				condList["AttackedRecently"] = true
 			elseif actor.mainSkill.skillFlags.spell then
@@ -302,7 +302,7 @@ local function doActorMisc(env, actor)
 	modDB.multipliers["BlitzCharge"] = output.BlitzCharges
 	modDB.multipliers["CrabBarrier"] = output.CrabBarriers
 
-	-- Process enemy modifiers 
+	-- Process enemy modifiers
 	for _, value in ipairs(modDB:List(nil, "EnemyModifier")) do
 		enemyDB:AddMod(value.mod)
 	end
@@ -352,7 +352,7 @@ local function doActorMisc(env, actor)
 			local effect = m_max(m_floor(70 * calcLib.mod(modDB, nil, "SelfChillEffect")), 0)
 			modDB:NewMod("ActionSpeed", "INC", -effect, "Freeze")
 		end
-	end	
+	end
 end
 
 -- Finalises the environment and performs the stat calculations:
@@ -431,7 +431,7 @@ function calcs.perform(env)
 		if env.aegisModList then
 			env.minion.itemList["Weapon 3"] = env.player.itemList["Weapon 2"]
 			env.minion.modDB:AddList(env.aegisModList)
-		end 
+		end
 		if env.player.mainSkill.skillData.minionUseBowAndQuiver then
 			if env.player.weaponData1.type == "Bow" then
 				env.minion.modDB:AddList(env.player.itemList["Weapon 1"].slotModList[1])
@@ -486,7 +486,7 @@ function calcs.perform(env)
 		local flaskBuffs = { }
 		for item in pairs(env.flasks) do
 			-- Avert thine eyes, lest they be forever scarred
-			-- I have no idea how to determine which buff is applied by a given flask, 
+			-- I have no idea how to determine which buff is applied by a given flask,
 			-- so utility flasks are grouped by base, unique flasks are grouped by name, and magic flasks by their modifiers
 			local effectMod = 1 + (effectInc + item.flaskData.effectInc) / 100
 			if item.buffModList[1] then
@@ -528,7 +528,7 @@ function calcs.perform(env)
 
 	-- Calculate skill life and mana reservations
 	env.player.reserved_LifeBase = 0
-	env.player.reserved_LifePercent = modDB:Sum("BASE", nil, "ExtraLifeReserved") 
+	env.player.reserved_LifePercent = modDB:Sum("BASE", nil, "ExtraLifeReserved")
 	env.player.reserved_ManaBase = 0
 	env.player.reserved_ManaPercent = 0
 	if breakdown then
@@ -570,7 +570,7 @@ function calcs.perform(env)
 			end
 		end
 	end
-	
+
 	-- Calculate attributes and life/mana pools
 	doActorAttribsPoolsConditions(env, env.player)
 	if env.minion then
@@ -630,7 +630,7 @@ function calcs.perform(env)
 					if a.reqNum ~= b.reqNum then
 						return a.reqNum > b.reqNum
 					elseif a.source ~= b.source then
-						return a.source < b.source 
+						return a.source < b.source
 					else
 						return a.sourceName < b.sourceName
 					end
@@ -645,7 +645,7 @@ function calcs.perform(env)
 		t_insert(extraAuraModList, value.mod)
 	end
 
-	-- Combine buffs/debuffs 
+	-- Combine buffs/debuffs
 	output.EnemyCurseLimit = modDB:Sum("BASE", nil, "EnemyCurseLimit")
 	local buffs = { }
 	env.buffs = buffs
@@ -653,16 +653,19 @@ function calcs.perform(env)
 	env.minionBuffs = minionBuffs
 	local debuffs = { }
 	env.debuffs = debuffs
-	local curses = { 
+	local curses = {
 		limit = output.EnemyCurseLimit,
 	}
-	local minionCurses = { 
+	local minionCurses = {
 		limit = 1,
 	}
 	local affectedByAura = { }
 	for _, activeSkill in ipairs(env.player.activeSkillList) do
 		local skillModList = activeSkill.skillModList
 		local skillCfg = activeSkill.skillCfg
+		if env.mode_buffs and activeSkill.skillTypes[SkillType.Aura] then
+			modDB.conditions["Using"..skillCfg.skillName:gsub(" ","")] = true
+		end
 		for _, buff in ipairs(activeSkill.buffList) do
 			if buff.cond and not skillModList:GetCondition(buff.cond, skillCfg) then
 				-- Nothing!
@@ -776,7 +779,7 @@ function calcs.perform(env)
 							curse.minionBuffModList:ScaleAddList(temp, (1 + buffInc / 100) * buffMore)
 						end
 					end
-					t_insert(curses, curse)	
+					t_insert(curses, curse)
 				end
 			end
 		end

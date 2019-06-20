@@ -66,7 +66,7 @@ local skills, mod, flag, skill = ...
 #mods
 
 #skill AnimateArmour
-#flags spell minion 
+#flags spell minion
 	minionHasItemSet = true,
 	minionUses = {
 		["Weapon 1"] = true,
@@ -220,6 +220,12 @@ local skills, mod, flag, skill = ...
 	statMap = {
 		["puresteel_banner_accuracy_rating_+%_final"] = {
 			mod("Accuracy", "MORE", nil, 0, 0, { type = "GlobalEffect", effectType = "AuraDebuff" }),
+		},
+		["attacks_impale_on_hit_%_chance"] = {
+			mod("ImpaleChance", "BASE", nil, ModFlag.Attack, 0, { type = "GlobalEffect", effectType = "Aura" }),
+		},
+		["impale_debuff_effect_+%"] = {
+			mod("ImpaleEffect", "INC", nil, 0, 0, { type = "GlobalEffect", effectType = "Aura" }),
 		},
 	},
 #baseMod skill("radius", 40)
@@ -521,7 +527,7 @@ local skills, mod, flag, skill = ...
 		["impurity_fire_damage_taken_+%_final"] = {
 			mod("FireDamageTaken", "MORE", nil, 0, 0, { type = "GlobalEffect", effectType = "Aura" }),
 		},
-	},	
+	},
 #mods
 
 #skill RallyingCry

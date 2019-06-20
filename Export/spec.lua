@@ -1673,7 +1673,7 @@ return {
 			name="Stats",
 			refTo="Stats",
 			type="Key",
-			width=520
+			width=2100
 		},
 		[4]={
 			list=false,
@@ -2340,7 +2340,7 @@ return {
 			name="Id",
 			refTo="",
 			type="String",
-			width=150
+			width=300
 		},
 		[2]={
 			list=false,
@@ -2354,7 +2354,7 @@ return {
 			name="Type",
 			refTo="ModType",
 			type="Key",
-			width=150
+			width=300
 		},
 		[4]={
 			list=false,
@@ -2403,7 +2403,7 @@ return {
 			name="Name",
 			refTo="",
 			type="String",
-			width=130
+			width=260
 		},
 		[11]={
 			list=false,
@@ -2452,7 +2452,7 @@ return {
 			name="SpawnTags",
 			refTo="Tags",
 			type="Key",
-			width=150
+			width=500
 		},
 		[18]={
 			list=true,
@@ -3639,7 +3639,7 @@ return {
 			name="GrantedEffect",
 			refTo="GrantedEffects",
 			type="Key",
-			width=210
+			width=250
 		},
 		[3]={
 			list=false,

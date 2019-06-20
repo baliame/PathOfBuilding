@@ -89,12 +89,12 @@ local function getCalculator(build, fullInit, modFunc)
 
 		-- Call function to make modifications to the enviroment
 		modFunc(env, ...)
-		
+
 		-- Run calculation pass
 		calcs.perform(env)
 
 		return env.player.output
-	end, baseOutput	
+	end, baseOutput
 end
 
 -- Get fast calculator for adding tree node modifiers
@@ -116,7 +116,7 @@ function calcs.getMiscCalculator(build)
 		env = calcs.initEnv(build, "CALCULATOR", override)
 		calcs.perform(env)
 		return env.player.output
-	end, baseOutput	
+	end, baseOutput
 end
 
 -- Build output for display in the side bar or calcs tab

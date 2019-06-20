@@ -154,10 +154,10 @@ Summon 2 additional Skeleton Warriors with Summon Skeleton
 ]],[[
 The Golden Rule
 Viridian Jewel
-(30–40)% increased Armour while Bleeding 
-Bleeding you inflict is Reflected to you 
-+1% to Chaos Resistance per Poison on you 
-Poison you inflict is Reflected to you 
+(30–40)% increased Armour while Bleeding
+Bleeding you inflict is Reflected to you
++1% to Chaos Resistance per Poison on you
+Poison you inflict is Reflected to you
 ]],[[
 Grand Spectrum
 Cobalt Jewel
@@ -381,10 +381,10 @@ Soul's Wick
 Cobalt Jewel
 Limited to: 1
 +2 to maximum number of Spectres
-(40–50)% reduced Mana Cost of Raise Spectre 
-Spectres have (800–1000)% increased Critical Strike Chance 
+(40–50)% reduced Mana Cost of Raise Spectre
+Spectres have (800–1000)% increased Critical Strike Chance
 Spectres have a Base Duration of 20 seconds
-Spectres do not travel between Areas 
+Spectres do not travel between Areas
 ]],[[
 Spire of Stone
 Crimson Jewel
@@ -478,14 +478,20 @@ Watcher's Eye
 Prismatic Jewel
 Source: Drops from unique{The Elder}
 Has Alt Variant: true
+Has Third Variant: true
 Variant: Anger: Fire Leech
 Variant: Anger: Fire Pen
+Variant: Anger: Crit Multiplier
+Variant: Anger: Fire Damage
 Variant: Anger: Physical Add Fire
 Variant: Anger: Physical Convert Fire
 Variant: Clarity: Dmg. Mana before Life
+Variant: Clarity: Mana on Hit
 Variant: Clarity: Mana Add Energy Shield
+Variant: Clarity: Recovery Rate
 Variant: Clarity: Recover Mana
 Variant: Clarity: Mana Cost
+Variant: Determination: Armour
 Variant: Determination: Block
 Variant: Determination: Phys Dmg Reduct
 Variant: Determination: Red. Crit Dmg
@@ -494,98 +500,163 @@ Variant: Discipline: Spell Block
 Variant: Discipline: Energy Shield on Hit
 Variant: Discipline: Energy Shield Regen
 Variant: Discipline: Faster Rchrg. Start
+Variant: Discipline: Recovery Rate
 Variant: Grace: Additional Evade
+Variant: Grace: Blind Chance
 Variant: Grace: Dodge Chance
 Variant: Grace: Movement Speed
 Variant: Grace: Enfeeble Immune
 Variant: Haste: Spell Dodge Chance
+Variant: Haste: Cooldown Recovery
+Variant: Haste: Faster Debuffs
 Variant: Haste: Onslaught on Kill
 Variant: Haste: Phasing
 Variant: Haste: Temp. Chains Immune
 Variant: Hatred: Added Cold Damage
 Variant: Hatred: Crit Chance
 Variant: Hatred: Cold Pen
+Variant: Hatred: Cold Damage
 Variant: Hatred: Physical Convert Cold
+Variant: Malevolence: Chaos Damage over time
+Variant: Malevolence: Cold Damage over time
+Variant: Malevolence: Recovery Rate
+Variant: Malevolence: Skill Duration
+Variant: Malevolence: Bleed Immune
+Variant: Malevolence: Poison Immune
+Variant: Malevolence: Ailments
+Variant: Precision: Blind Immune
+Variant: Precision: Flask on Crit
+Variant: Precision: Inc Attack Damage
+Variant: Precision: Inc Attack Speed
+Variant: Precision: Crit Multiplier
+Variant: Pride: Double Damage
+Variant: Pride: Impale Chance
+Variant: Pride: Impale Hits
+Variant: Pride: Physical Damage
+Variant: Pride: Intimidate
+Variant: Purity of Elements: Chaos Res
+Variant: Purity of Elements: Ele Reflect
 Variant: Purity of Elements: Phys as Cold
 Variant: Purity of Elements: Phys as Fire
 Variant: Purity of Elements: Phys as Light
 Variant: Purity of Elements: EW Immune
 Variant: Purity of Fire: Ignite Immune
+Variant: Purity of Fire: Fire Reflect
 Variant: Purity of Fire: Phys as Fire
 Variant: Purity of Fire: Bur.Gr Immune
 Variant: Purity of Fire: Flamm. Immune
 Variant: Purity of Ice: Freeze Immune
+Variant: Purity of Ice: Cold Reflect
 Variant: Purity of Ice: Phys as Cold
 Variant: Purity of Ice: Chl.Gr Immune
 Variant: Purity of Ice: Frostbite Immune
 Variant: Purity of Lightning: Shock Immune
+Variant: Purity of Lightning: Light Reflect
 Variant: Purity of Lightning: Phys as Light
 Variant: Purity of Lightning: Cond. Immune
 Variant: Purity of Lightning: Shk.Gr Immune
 Variant: Vitality: Life Leech
 Variant: Vitality: Life Regen
 Variant: Vitality: Life on Hit
+Variant: Vitality: Flask Recovery
 Variant: Vitality: Life Recovery
+Variant: Wrath: Crit Chance
+Variant: Wrath: Light Damage
 Variant: Wrath: Light Leech
 Variant: Wrath: Light Pen
 Variant: Wrath: Phys Add Light
 Variant: Wrath: Phys Convert Light
 Limited to: 1
 (4–6)% increased maximum Energy Shield
-(4–6)% increased maximum Life 
+(4–6)% increased maximum Life
 (4–6)% increased maximum Mana
 {variant:1}(1-1.5)% of Fire Damage Leeched as Life while affected by Anger
 {variant:2}Damage Penetrates (10-15)% Fire Resistance while affected by Anger
-{variant:3}Gain (15-25)% of Physical Damage as Extra Fire Damage while affected by Anger
-{variant:4}(25-40)% of Physical Damage Converted to Fire Damage while affected by Anger
-{variant:5}(6-10)% of Damage taken from Mana before Life while affected by Clarity
-{variant:6}Gain (12-18)% of Maximum Mana as Extra Maximum Energy Shield while affected by Clarity
-{variant:7}(10-15)% chance to Recover 10% of Maximum Mana when you use a Skill while affected by Clarity
-{variant:8}-(10-5) to Total Mana Cost of Skills while affected by Clarity
-{variant:9}(5-8)% chance to Block while affected by Determination
-{variant:10}(5-8)% additional Physical Damage Reduction while affected by Determination
-{variant:11}You take (60-40)% reduced Extra Damage from Critical Strikes while affected by Determination
-{variant:12}Unaffected by Vulnerability while affected by Determination
-{variant:13}(5-8)% chance to Block Spells while affected by Discipline
-{variant:14}(20-30) Energy Shield gained for each Enemy Hit while affected by Discipline
-{variant:15}(1.5-2.5)% of Maximum Energy Shield Regenerated per Second while affected by Discipline
-{variant:16}(30-40)% faster start of Energy Shield Recharge while affected by Discipline
-{variant:17}+(5-8)% chance to Evade Attacks while affected by Grace
-{variant:18}(6-10)% chance to Dodge Attacks while affected by Grace
-{variant:19}(10-15)% increased Movement Speed while affected by Grace
-{variant:20}Unaffected by Enfeeble while affected by Grace
-{variant:21}(5-8)% chance to Dodge Spells while affected by Haste
-{variant:22}You gain Onslaught for 4 seconds on Kill while affected by Haste
-{variant:23}You have Phasing while affected by Haste
-{variant:24}Unaffected by Temporal Chains while affected by Haste
-{variant:25}Adds (58-70) to (88-104) Cold Damage while affected by Hatred
-{variant:26}+(1.2-1.8)% to Critical Strike Chance while affected by Hatred
-{variant:27}Damage Penetrates (10-15)% Cold Resistance while affected by Hatred
-{variant:28}(25-40)% of Physical Damage Converted to Cold Damage while affected by Hatred
-{variant:29}(8-12)% of Physical Damage taken as Cold Damage while affected by Purity of Elements
-{variant:30}(8-12)% of Physical Damage taken as Fire Damage while affected by Purity of Elements
-{variant:31}(8-12)% of Physical Damage taken as Lightning Damage while affected by Purity of Elements
-{variant:32}Unaffected by Elemental Weakness while affected by Purity of Elements
-{variant:33}Immune to Ignite while affected by Purity of Fire
-{variant:34}(6-10)% of Physical Damage taken as Fire Damage while affected by Purity of Fire
-{variant:35}Unaffected by Burning Ground while affected by Purity of Fire
-{variant:36}Unaffected by Flammability while affected by Purity of Fire
-{variant:37}Immune to Freeze while affected by Purity of Ice
-{variant:38}(6-10)% of Physical Damage taken as Cold Damage while affected by Purity of Ice
-{variant:39}Unaffected by Chilled Ground while affected by Purity of Ice
-{variant:40}Unaffected by Frostbite while affected by Purity of Ice
-{variant:41}Immune to Shock while affected by Purity of Lightning
-{variant:42}(6-10)% of Physical Damage taken as Lightning Damage while affected by Purity of Lightning
-{variant:43}Unaffected by Conductivity while affected by Purity of Lightning
-{variant:44}Unaffected by Shocked Ground while affected by Purity of Lightning
-{variant:45}(1-1.5)% of Damage leeched as Life while affected by Vitality
-{variant:46}(100-140) Life Regenerated per Second while affected by Vitality
-{variant:47}(20-30) Life gained for each Enemy Hit while affected by Vitality
-{variant:48}(20-30)% increased Life Recovery Rate while affected by Vitality
-{variant:49}(1-1.5)% of Lightning Damage is Leeched as Mana while affected by Wrath
-{variant:50}Damage Penetrates (10-15)% Lightning Resistance while affected by Wrath
-{variant:51}Gain (15-25)% of Physical Damage as Extra Lightning Damage while affected by Wrath
-{variant:52}(25-40)% of Physical Damage Converted to Lightning Damage while affected by Wrath
+{variant:3}+(30-50)% to Critical Strike Multiplier while affected by Anger
+{variant:4}(40-60)% increased Fire Damage while affected by Anger
+{variant:5}Gain (15-25)% of Physical Damage as Extra Fire Damage while affected by Anger
+{variant:6}(25-40)% of Physical Damage Converted to Fire Damage while affected by Anger
+{variant:7}(6-10)% of Damage taken from Mana before Life while affected by Clarity
+{variant:8}(15-20)% of Damage taken gained as Mana over 4 seconds when Hit while affected by Clarity
+{variant:9}Gain (12-18)% of Maximum Mana as Extra Maximum Energy Shield while affected by Clarity
+{variant:10}(20-30)% increased Mana Recovery Rate while affected by Clarity
+{variant:11}(10-15)% chance to Recover 10% of Maximum Mana when you use a Skill while affected by Clarity
+{variant:12}-(10-5) to Total Mana Cost of Skills while affected by Clarity
+{variant:13}+(600-1000) to Armour while affected by Determination
+{variant:14}(5-8)% chance to Block while affected by Determination
+{variant:15}(5-8)% additional Physical Damage Reduction while affected by Determination
+{variant:16}You take (60-40)% reduced Extra Damage from Critical Strikes while affected by Determination
+{variant:17}Unaffected by Vulnerability while affected by Determination
+{variant:18}(5-8)% chance to Block Spells while affected by Discipline
+{variant:19}(20-30) Energy Shield gained for each Enemy Hit while affected by Discipline
+{variant:20}(1.5-2.5)% of Maximum Energy Shield Regenerated per Second while affected by Discipline
+{variant:21}(30-40)% faster start of Energy Shield Recharge while affected by Discipline
+{variant:22}(20-30)% increased Energy Shield Recovery Rate while affected by Discipline
+{variant:23}+(5-8)% chance to Evade Attacks while affected by Grace
+{variant:24}(30-50)% chance to Blind Enemies which Hit you while affected by Grace
+{variant:25}(6-10)% chance to Dodge Attacks while affected by Grace
+{variant:26}(10-15)% increased Movement Speed while affected by Grace
+{variant:27}Unaffected by Enfeeble while affected by Grace
+{variant:28}(5-8)% chance to Dodge Spells while affected by Haste
+{variant:29}(30-50)% increased cooldown recovery speed of Movement Skills used while affected by Haste
+{variant:30}Debuffs on you expire (20-15)% faster while affected by Haste
+{variant:31}You gain Onslaught for 4 seconds on Kill while affected by Haste
+{variant:32}You have Phasing while affected by Haste
+{variant:33}Unaffected by Temporal Chains while affected by Haste
+{variant:34}Adds (58-70) to (88-104) Cold Damage while affected by Hatred
+{variant:35}+(1.2-1.8)% to Critical Strike Chance while affected by Hatred
+{variant:36}Damage Penetrates (10-15)% Cold Resistance while affected by Hatred
+{variant:37}(40-60)% increased Cold Damage while affected by Hatred
+{variant:38}(25-40)% of Physical Damage Converted to Cold Damage while affected by Hatred
+{variant:39}+(18-22)% to Non-Ailment Chaos Damage over Time Multiplier while affected by Malevolence
+{variant:40}+(18-22)% to Cold Damage over Time Multiplier while affected by Malevolence
+{variant:41}(15-20)% increased Recovery rate of Life and Energy Shield while affected by Malevolence
+{variant:42}(20-30)% increased Skill Effect Duration while affected by Malevolence
+{variant:43}Unaffected by Bleeding while affected by Malevolence
+{variant:44}Unaffected by Poison while affected by Malevolence
+{variant:45}Damaging Ailments you inflict deal Damage (10-15)% faster while affected by Malevolence
+{variant:46}Cannot be Blinded while affected by Precision
+{variant:47}Gain a Flask Charge when you deal a Critical Strike while affected by Precision
+{variant:48}(40-60)% increased Attack Damage while affected by Precision
+{variant:49}(10-15)% increased Attack Speed while affected by Precision
+{variant:50}+(30-50)% to Critical Strike Multiplier while affected by Precision
+{variant:51}(8-12)% chance to deal Double Damage while using Pride
+{variant:52}25% chance to Impale Enemies on Hit with Attacks while using Pride
+{variant:53}Impales you inflict last 2 additional Hits while using Pride
+{variant:54}(40-60)% increased Attack Physical Damage while using Pride
+{variant:55}Your Hits Intimidate Enemies for 4 seconds while you are using Pride
+{variant:56}+(30-50)% to Chaos Resistance while affected by Purity of Elements
+{variant:57}(50-40)% reduced Reflected Elemental Damage taken while affected by Purity of Elements
+{variant:58}(8-12)% of Physical Damage taken as Cold Damage while affected by Purity of Elements
+{variant:59}(8-12)% of Physical Damage taken as Fire Damage while affected by Purity of Elements
+{variant:60}(8-12)% of Physical Damage taken as Lightning Damage while affected by Purity of Elements
+{variant:61}Unaffected by Elemental Weakness while affected by Purity of Elements
+{variant:62}Immune to Ignite while affected by Purity of Fire
+{variant:63}(50-40)% reduced Reflected Fire Damage taken while affected by Purity of Fire
+{variant:64}(6-10)% of Physical Damage taken as Fire Damage while affected by Purity of Fire
+{variant:65}Unaffected by Burning Ground while affected by Purity of Fire
+{variant:66}Unaffected by Flammability while affected by Purity of Fire
+{variant:67}Immune to Freeze while affected by Purity of Ice
+{variant:68}(50-40)% reduced Reflected Cold Damage taken while affected by Purity of Ice
+{variant:69}(6-10)% of Physical Damage taken as Cold Damage while affected by Purity of Ice
+{variant:70}Unaffected by Chilled Ground while affected by Purity of Ice
+{variant:71}Unaffected by Frostbite while affected by Purity of Ice
+{variant:72}Immune to Shock while affected by Purity of Lightning
+{variant:73}(50-40)% reduced Reflected Lightning Damage taken while affected by Purity of Lightning
+{variant:74}(6-10)% of Physical Damage taken as Lightning Damage while affected by Purity of Lightning
+{variant:75}Unaffected by Conductivity while affected by Purity of Lightning
+{variant:76}Unaffected by Shocked Ground while affected by Purity of Lightning
+{variant:77}(1-1.5)% of Damage leeched as Life while affected by Vitality
+{variant:78}(100-140) Life Regenerated per Second while affected by Vitality
+{variant:79}(20-30) Life gained for each Enemy Hit while affected by Vitality
+{variant:80}(50-70)% increased Life Recovery from Flasks while affected by Vitality
+{variant:81}(20-30)% increased Life Recovery Rate while affected by Vitality
+{variant:82}(70-100)% increased Critical Strike Chance while affected by Wrath
+{variant:83}(40-60)% increased Lightning Damage while affected by Wrath
+{variant:84}(1-1.5)% of Lightning Damage is Leeched as Mana while affected by Wrath
+{variant:85}Damage Penetrates (10-15)% Lightning Resistance while affected by Wrath
+{variant:86}Gain (15-25)% of Physical Damage as Extra Lightning Damage while affected by Wrath
+{variant:87}(25-40)% of Physical Damage Converted to Lightning Damage while affected by Wrath
 ]],
 -- Jewel: Threshold
 [[
@@ -637,7 +708,7 @@ Viridian Jewel
 Limited to: 2
 Radius: Medium
 (10–15)% increased Cold Damage
-With at least 40 Dexterity in Radius, Melee Damage 
+With at least 40 Dexterity in Radius, Melee Damage
 dealt by Frost Blades Penetrates 15% Cold Resistance
 With at least 40 Dexterity in Radius, Frost Blades has 25% increased Projectile Speed
 ]],[[
@@ -645,7 +716,7 @@ First Snow
 Cobalt Jewel
 Limited to: 2
 Radius: Medium
-(7–10)% increased Projectile Damage 
+(7–10)% increased Projectile Damage
 With at least 40 Intelligence in Radius, Freezing Pulse fires 2 additional Projectiles
 With at least 40 Intelligence in Radius, 25% increased Freezing Pulse Damage if
 you've Shattered an Enemy Recently
@@ -693,10 +764,10 @@ The Long Winter
 Cobalt Jewel
 Limited to: 2
 Radius: Medium
-(10–15)% increased Cold Damage 
+(10–15)% increased Cold Damage
 With 40 Intelligence in Radius, 20% of Glacial Cascade Physical Damage
 Converted to Cold Damage
-With 40 Intelligence in Radius, Glacial Cascade has an additional Burst 
+With 40 Intelligence in Radius, Glacial Cascade has an additional Burst
 ]],[[
 Might and Influence
 Viridian Jewel
@@ -758,7 +829,7 @@ Variant: {2_6}Pre 3.0.0
 Variant: Current
 Limited to: 1
 Radius: Medium
-(10–15)% increased Physical Damage 
+(10–15)% increased Physical Damage
 With at least 40 Dexterity in Radius, Ethereal Knives fires Projectiles in a Nova
 {variant:1}With at least 40 Dexterity in Radius, Ethereal Knives fires 10 additional Projectiles
 {variant:2}With at least 40 Dexterity in Radius, Ethereal Knives fires 5 additional Projectiles
@@ -817,11 +888,11 @@ Sudden Ignition
 Viridian Jewel
 Limited to: 1
 Radius: Medium
-(10–15)% increased Fire Damage 
+(10–15)% increased Fire Damage
 With at least 40 Dexterity in Radius, Burning
 Arrow can inflict an additional Ignite on an Enemy
 ]],[[
-Unending Hunger 
+Unending Hunger
 Cobalt Jewel
 Limited to: 2
 Radius: Medium
@@ -842,7 +913,7 @@ Violent Dead
 Cobalt Jewel
 Limited to: 2
 Radius: Medium
-Minions deal (10-15)% increased Damage 
+Minions deal (10-15)% increased Damage
 With at least 40 Intelligence in Radius, Raised
 Zombies' Slam Attack has 100% increased Cooldown Recovery Speed
 With at least 40 Intelligence in Radius, Raised Zombies' Slam
@@ -866,7 +937,7 @@ Wildfire
 Crimson Jewel
 Limited to: 1
 Radius: Medium
-(10–15)% increased Fire Damage 
+(10–15)% increased Fire Damage
 With at least 40 Strength in Radius, Molten Strike fires 2 additional Projectiles
 With at least 40 Strength in Radius, Molten Strike has 25% increased Area of Effect
 ]],[[
@@ -887,7 +958,7 @@ Winter Burial
 Crimson Jewel
 Limited to: 2
 Radius: Medium
-(10–15)% increased Cold Damage 
+(10–15)% increased Cold Damage
 With at least 40 Strength in Radius, Glacial Hammer deals
 Cold-only Splash Damage to surrounding targets
 With at least 40 Strength in Radius, 25% of Glacial

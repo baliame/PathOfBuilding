@@ -180,6 +180,7 @@ for _, targetVersion in ipairs(targetVersionList) do
 		JewelAbyss = targetVersion ~= "2_6" and dataModule("ModJewelAbyss") or { },
 	}
 	verData.masterMods = dataModule("ModMaster")
+	verData.fossilMods = dataModule("ModFossil")
 	verData.enchantments = {
 		Helmet = dataModule("EnchantmentHelmet"),
 		Boots = dataModule("EnchantmentBoots"),
@@ -289,7 +290,7 @@ for _, targetVersion in ipairs(targetVersionList) do
 	verData.itemBaseTypeList = { }
 	for type, list in pairs(verData.itemBaseLists) do
 		table.insert(verData.itemBaseTypeList, type)
-		table.sort(list, function(a, b) 
+		table.sort(list, function(a, b)
 			if a.base.req and b.base.req then
 				if a.base.req.level == b.base.req.level then
 					return a.name < b.name

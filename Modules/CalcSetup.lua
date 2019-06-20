@@ -58,6 +58,7 @@ function calcs.initModDB(env, modDB)
 	modDB.conditions["Buffed"] = env.mode_buffs
 	modDB.conditions["Combat"] = env.mode_combat
 	modDB.conditions["Effective"] = env.mode_effective
+	modDB:NewMod("ImpaleHits", "BASE", 5, "Base")
 end
 
 function calcs.buildModListForNode(env, node)
@@ -110,7 +111,7 @@ function calcs.buildModListForNodeList(env, nodeList, finishJewels)
 	for _, node in pairs(nodeList) do
 		local nodeModList = calcs.buildModListForNode(env, node)
 		modList:AddList(nodeModList)
-		if env.mode == "MAIN" then	
+		if env.mode == "MAIN" then
 			node.finalModList = nodeModList
 		end
 	end
@@ -119,11 +120,11 @@ function calcs.buildModListForNodeList(env, nodeList, finishJewels)
 		-- Process extra radius nodes; these are unallocated nodes near conversion or threshold jewels that need to be processed
 		for _, node in pairs(env.extraRadiusNodeList) do
 			local nodeModList = calcs.buildModListForNode(env, node)
-			if env.mode == "MAIN" then	
+			if env.mode == "MAIN" then
 				node.finalModList = nodeModList
 			end
 		end
-		
+
 		-- Finalise radius jewels
 		for _, rad in pairs(env.radiusJewelList) do
 			rad.func(nil, modList, rad.data)
@@ -139,7 +140,7 @@ function calcs.buildModListForNodeList(env, nodeList, finishJewels)
 	return modList
 end
 
--- Initialise environment: 
+-- Initialise environment:
 -- 1. Initialises the player and enemy modifier databases
 -- 2. Merges modifiers for all items
 -- 3. Builds a list of jewels with radius functions
@@ -340,8 +341,8 @@ function calcs.initEnv(build, mode, override)
 		local item
 		if slotName == override.repSlotName then
 			item = override.repItem
-		elseif override.repItem and override.repSlotName:match("^Weapon 1") and slotName:match("^Weapon 2") and 
-		  (override.repItem.base.type == "Staff" or override.repItem.base.type == "Two Handed Sword" or override.repItem.base.type == "Two Handed Axe" or override.repItem.base.type == "Two Handed Mace" 
+		elseif override.repItem and override.repSlotName:match("^Weapon 1") and slotName:match("^Weapon 2") and
+		  (override.repItem.base.type == "Staff" or override.repItem.base.type == "Two Handed Sword" or override.repItem.base.type == "Two Handed Axe" or override.repItem.base.type == "Two Handed Mace"
 		  or (override.repItem.base.type == "Bow" and item and item.base.type ~= "Quiver")) then
 			item = nil
 		elseif slot.nodeId and override.spec then
@@ -420,7 +421,7 @@ function calcs.initEnv(build, mode, override)
 			env.player.itemList[slotName] = item
 			-- Merge mods for this item
 			local srcList = item.modList or item.slotModList[slot.slotNum]
-			if item.requirements then	
+			if item.requirements then
 				t_insert(env.requirementsTable, {
 					source = "Item",
 					sourceItem = item,
@@ -522,11 +523,11 @@ function calcs.initEnv(build, mode, override)
 			env.flasks[override.toggleFlask] = true
 		end
 	end
-	
+
 	if env.mode == "MAIN" then
 		-- Process extra skills granted by items
 		local markList = wipeTable(tempTable1)
-		for _, grantedSkill in ipairs(env.itemGrantedSkills) do	
+		for _, grantedSkill in ipairs(env.itemGrantedSkills) do
 			-- Check if a matching group already exists
 			local group
 			for index, socketGroup in pairs(build.skillsTab.socketGroupList) do
@@ -573,7 +574,7 @@ function calcs.initEnv(build, mode, override)
 			end
 			build.skillsTab:ProcessSocketGroup(group)
 		end
-		
+
 		-- Remove any socket groups that no longer have a matching item
 		local i = 1
 		while build.skillsTab.socketGroupList[i] do
@@ -627,7 +628,7 @@ function calcs.initEnv(build, mode, override)
 				for _, value in ipairs(env.modDB:List(groupCfg, "ExtraSupport")) do
 					local grantedEffect = env.data.skills[value.skillId]
 					if grantedEffect then
-						t_insert(supportList, { 
+						t_insert(supportList, {
 							grantedEffect = grantedEffect,
 							level = value.level,
 							quality = 0,
@@ -693,11 +694,11 @@ function calcs.initEnv(build, mode, override)
 					else
 						processGrantedEffect(gemInstance.grantedEffect)
 					end
-				end	
+				end
 			end
 
 			-- Create active skills
-			for _, gemInstance in ipairs(socketGroup.gemList) do	
+			for _, gemInstance in ipairs(socketGroup.gemList) do
 				if gemInstance.enabled and (gemInstance.gemData or gemInstance.grantedEffect) then
 					local grantedEffectList = gemInstance.gemData and gemInstance.gemData.grantedEffectList or { gemInstance.grantedEffect }
 					for index, grantedEffect in ipairs(grantedEffectList) do

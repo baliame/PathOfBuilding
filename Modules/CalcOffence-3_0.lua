@@ -278,10 +278,10 @@ function calcs.offence(env, actor, activeSkill)
 	end
 	if skillFlags.melee then
 		if skillFlags.weapon1Attack then
-			actor.weaponRange1 = (actor.weaponData1.range and actor.weaponData1.range + skillModList:Sum("BASE", skillCfg, "MeleeWeaponRange")) or (6 + skillModList:Sum("BASE", skillCfg, "UnarmedRange"))	
+			actor.weaponRange1 = (actor.weaponData1.range and actor.weaponData1.range + skillModList:Sum("BASE", skillCfg, "MeleeWeaponRange")) or (6 + skillModList:Sum("BASE", skillCfg, "UnarmedRange"))
 		end
 		if skillFlags.weapon2Attack then
-			actor.weaponRange2 = (actor.weaponData2.range and actor.weaponData2.range + skillModList:Sum("BASE", skillCfg, "MeleeWeaponRange")) or (6 + skillModList:Sum("BASE", skillCfg, "UnarmedRange"))	
+			actor.weaponRange2 = (actor.weaponData2.range and actor.weaponData2.range + skillModList:Sum("BASE", skillCfg, "MeleeWeaponRange")) or (6 + skillModList:Sum("BASE", skillCfg, "UnarmedRange"))
 		end
 		if activeSkill.skillTypes[SkillType.MeleeSingleTarget] then
 			local range = 100
@@ -586,7 +586,7 @@ function calcs.offence(env, actor, activeSkill)
 			end
 			if inc ~= 0 then
 				t_insert(breakdown.ManaCost, s_format("x %.2f ^8(increased/reduced mana cost)", 1 + inc/100))
-			end	
+			end
 			if base ~= 0 then
 				t_insert(breakdown.ManaCost, s_format("- %d ^8(- mana cost)", -base))
 			end
@@ -699,8 +699,8 @@ function calcs.offence(env, actor, activeSkill)
 	for _, pass in ipairs(passList) do
 		local globalOutput, globalBreakdown = output, breakdown
 		local source, output, cfg, breakdown = pass.source, pass.output, pass.cfg, pass.breakdown
-		
-		-- Calculate hit chance 
+
+		-- Calculate hit chance
 		output.Accuracy = calcLib.val(skillModList, "Accuracy", cfg)
 		if breakdown then
 			breakdown.Accuracy = breakdown.simple(nil, cfg, output.Accuracy, "Accuracy")
@@ -757,7 +757,7 @@ function calcs.offence(env, actor, activeSkill)
 					base = s_format("%.2f ^8(base)", 1 / baseTime),
 					{ "%.2f ^8(increased/reduced)", 1 + inc/100 },
 					{ "%.2f ^8(more/less)", more },
-					{ "%.2f ^8(action speed modifier)", skillFlags.selfCast and globalOutput.ActionSpeedMod or 1 }, 
+					{ "%.2f ^8(action speed modifier)", skillFlags.selfCast and globalOutput.ActionSpeedMod or 1 },
 					total = s_format("= %.2f ^8per second", output.Speed)
 				})
 			end
@@ -903,6 +903,36 @@ function calcs.offence(env, actor, activeSkill)
 		end
 		output.RuthlessBlowMultiplier = 1 + skillModList:Sum("BASE", cfg, "RuthlessBlowMultiplier") / 100
 		output.RuthlessBlowEffect = 1 - output.RuthlessBlowChance / 100 + output.RuthlessBlowChance / 100 * output.RuthlessBlowMultiplier
+		output.ImpaleDamageMultiplier = 1
+		output.ImpaleHits = skillModList:Sum("BASE", cfg, "ImpaleHits")
+		output.ImpaleEffect =  skillModList:Sum("INC", cfg, "ImpaleEffect")
+
+		skillFlags.impale = false
+		if not skillFlags.hit then
+			output.ImpaleChanceOnHit = 0
+			output.ImpaleChanceOnCrit = 0
+		else
+			output.ImpaleChanceOnHit = m_min(100, skillModList:Sum("BASE", cfg, "ImpaleChance"))
+			output.ImpaleChanceOnCrit = output.ImpaleChanceOnHit
+		end
+		if canDeal.Physical and (output.ImpaleChanceOnHit + output.ImpaleChanceOnCrit) > 0 then
+			skillFlags.impale = true
+			output.ImpaleDamageMultiplier = 1 + (output.ImpaleChanceOnHit / 100 * output.ImpaleHits * (1 + output.ImpaleEffect / 100) * 0.1)
+			if breakdown then
+				breakdown.ImpaleDamageMultiplier = {}
+				breakdown.multiChain(breakdown.ImpaleDamageMultiplier, {
+					label = "Impale damage modifier:",
+					base = s_format("%d ^8(base hit damage)", 1),
+						{"%.2f ^8(physical damage portion recorded by impale)", 0.1 },
+						{"%.2f ^8(chance to impale)", output.ImpaleChanceOnHit / 100 },
+						{"%d ^8(number of hits for an impale stack)", output.ImpaleHits },
+						{"%.2f ^8(impale effect)", 1 + output.ImpaleEffect / 100 },
+					total = s_format("= %.2f", output.ImpaleDamageMultiplier),
+				})
+			end
+			skillModList:NewMod("ImpaleDamageMultiplier", "MORE", output.ImpaleDamageMultiplier * 100, "Impale (max stacks)")
+			output.ImpaleChance = output.ImpaleChanceOnHit
+		end
 
 		-- Calculate base hit damage
 		for _, damageType in ipairs(dmgTypeList) do
@@ -982,7 +1012,7 @@ function calcs.offence(env, actor, activeSkill)
 					if pass == 1 then
 						-- Apply crit multiplier
 						allMult = allMult * output.CritMultiplier
-					end				
+					end
 					min = min * allMult
 					max = max * allMult
 					if (min ~= 0 or max ~= 0) and env.mode_effective then
@@ -1013,6 +1043,9 @@ function calcs.offence(env, actor, activeSkill)
 						if not skillModList:Flag(cfg, "Ignore"..damageType.."Resistance", isElemental[damageType] and "IgnoreElementalResistances" or nil) and not enemyDB:Flag(nil, "SelfIgnore"..damageType.."Resistance") then
 							effMult = effMult * (1 - (resist - pen) / 100)
 						end
+						if damageType == "Physical" and skillFlags.impale then
+							effMult = effMult * output.ImpaleDamageMultiplier
+						end
 						min = min * effMult
 						max = max * effMult
 						if env.mode == "CALCS" then
@@ -1034,7 +1067,7 @@ function calcs.offence(env, actor, activeSkill)
 							end
 						end
 					else
-						if not noLifeLeech then				
+						if not noLifeLeech then
 							local lifeLeech
 							if skillModList:Flag(nil, "LifeLeechBasedOnChaosDamage") then
 								if damageType == "Chaos" then
@@ -1300,7 +1333,7 @@ function calcs.offence(env, actor, activeSkill)
 		local dotTypeCfg = copyTable(dotCfg, true)
 		dotTypeCfg.keywordFlags = bor(dotTypeCfg.keywordFlags, KeywordFlag[damageType.."Dot"])
 		activeSkill["dot"..damageType.."Cfg"] = dotTypeCfg
-		local baseVal 
+		local baseVal
 		if canDeal[damageType] then
 			baseVal = skillData[damageType.."Dot"] or 0
 		else
@@ -1440,7 +1473,7 @@ function calcs.offence(env, actor, activeSkill)
 			output.FreezeChanceOnHit = output.FreezeChanceOnHit * freezeMult
 			output.FreezeChanceOnCrit = output.FreezeChanceOnCrit * freezeMult
 		end
-	
+
 		local function calcAilmentDamage(type, sourceHitDmg, sourceCritDmg)
 			-- Calculate the inflict chance and base damage of a secondary effect (bleed/poison/ignite/shock/freeze)
 			local chanceOnHit, chanceOnCrit = output[type.."ChanceOnHit"], output[type.."ChanceOnCrit"]
@@ -1570,7 +1603,7 @@ function calcs.offence(env, actor, activeSkill)
 					t_insert(breakdown.BleedDPS, s_format("= %.1f", baseVal))
 					breakdown.multiChain(breakdown.BleedDPS, {
 						label = "Bleed DPS:",
-						base = s_format("%.1f ^8(total damage per second)", baseVal), 
+						base = s_format("%.1f ^8(total damage per second)", baseVal),
 						{ "%.2f ^8(ailment effect modifier)", effectMod },
 						{ "%.2f ^8(damage rate modifier)", rateMod },
 						{ "%.3f ^8(effective DPS modifier)", effMult },
@@ -1706,7 +1739,7 @@ function calcs.offence(env, actor, activeSkill)
 					t_insert(breakdown.PoisonDPS, s_format("= %.1f", baseVal, 1))
 					breakdown.multiChain(breakdown.PoisonDPS, {
 						label = "Poison DPS:",
-						base = s_format("%.1f ^8(total damage per second)", baseVal), 
+						base = s_format("%.1f ^8(total damage per second)", baseVal),
 						{ "%.2f ^8(ailment effect modifier)", effectMod },
 						{ "%.2f ^8(damage rate modifier)", rateMod },
 						{ "%.3f ^8(effective DPS modifier)", effMult },
@@ -1750,7 +1783,7 @@ function calcs.offence(env, actor, activeSkill)
 					end
 				end
 			end
-		end	
+		end
 
 		-- Calculate ignite chance and damage
 		if canDeal.Fire and (output.IgniteChanceOnHit + output.IgniteChanceOnCrit) > 0 then
@@ -1860,7 +1893,7 @@ function calcs.offence(env, actor, activeSkill)
 					t_insert(breakdown.IgniteDPS, s_format("= %.1f", baseVal, 1))
 					breakdown.multiChain(breakdown.IgniteDPS, {
 						label = "Ignite DPS:",
-						base = s_format("%.1f ^8(total damage per second)", baseVal), 
+						base = s_format("%.1f ^8(total damage per second)", baseVal),
 						{ "%.2f ^8(ailment effect modifier)", effectMod },
 						{ "%.2f ^8(burn rate modifier)", rateMod },
 						{ "%.3f ^8(effective DPS modifier)", effMult },
@@ -2008,6 +2041,10 @@ function calcs.offence(env, actor, activeSkill)
 	if isAttack then
 		combineStat("BleedChance", "AVERAGE")
 		combineStat("BleedDPS", "CHANCE", "BleedChance")
+		combineStat("ImpaleChance", "AVERAGE")
+		combineStat("ImpaleDamageMultiplier", "AVERAGE")
+		combineStat("ImpaleEffect", "AVERAGE")
+		combineStat("ImpaleHits", "AVERAGE")
 		combineStat("PoisonChance", "AVERAGE")
 		combineStat("PoisonDPS", "CHANCE", "PoisonChance")
 		combineStat("PoisonDamage", "CHANCE", "PoisonChance")

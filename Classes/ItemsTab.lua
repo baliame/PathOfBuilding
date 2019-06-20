@@ -14,7 +14,7 @@ local m_ceil = math.ceil
 local m_floor = math.floor
 local m_modf = math.modf
 
-local rarityDropList = { 
+local rarityDropList = {
 	{ label = colorCodes.NORMAL.."Normal", rarity = "NORMAL" },
 	{ label = colorCodes.MAGIC.."Magic", rarity = "MAGIC" },
 	{ label = colorCodes.RARE.."Rare", rarity = "RARE" },
@@ -37,7 +37,7 @@ local ItemsTabClass = newClass("ItemsTab", "UndoHandler", "ControlHost", "Contro
 	self.Control()
 
 	self.build = build
-	
+
 	self.socketViewer = new("PassiveTreeView")
 
 	self.items = { }
@@ -91,7 +91,7 @@ local ItemsTabClass = newClass("ItemsTab", "UndoHandler", "ControlHost", "Contro
 				return self.activeItemSet.useSecondWeaponSet
 			end
 			for i = 1, 2 do
-				local abyssal = new("ItemSlotControl", {"TOPLEFT",prevSlot,"BOTTOMLEFT"}, 0, 0, self, slotName.."Swap Abyssal Socket "..i, "Abyssal #"..i)			
+				local abyssal = new("ItemSlotControl", {"TOPLEFT",prevSlot,"BOTTOMLEFT"}, 0, 0, self, slotName.."Swap Abyssal Socket "..i, "Abyssal #"..i)
 				addSlot(abyssal)
 				abyssal.parentSlot = swapSlot
 				abyssal.weaponSet = 2
@@ -104,7 +104,7 @@ local ItemsTabClass = newClass("ItemsTab", "UndoHandler", "ControlHost", "Contro
 		if slotName == "Weapon 1" or slotName == "Weapon 2" or slotName == "Helmet" or slotName == "Gloves" or slotName == "Body Armour" or slotName == "Boots" or slotName == "Belt" then
 			-- Add Abyssal Socket slots
 			for i = 1, 2 do
-				local abyssal = new("ItemSlotControl", {"TOPLEFT",prevSlot,"BOTTOMLEFT"}, 0, 0, self, slotName.." Abyssal Socket "..i, "Abyssal #"..i)			
+				local abyssal = new("ItemSlotControl", {"TOPLEFT",prevSlot,"BOTTOMLEFT"}, 0, 0, self, slotName.." Abyssal Socket "..i, "Abyssal #"..i)
 				addSlot(abyssal)
 				abyssal.parentSlot = slot
 				if slotName:match("Weapon") then
@@ -208,12 +208,12 @@ local ItemsTabClass = newClass("ItemsTab", "UndoHandler", "ControlHost", "Contro
 		self:CraftItem()
 	end)
 	self.controls.craftDisplayItem.shown = function()
-		return self.displayItem == nil 
+		return self.displayItem == nil
 	end
 	self.controls.newDisplayItem = new("ButtonControl", {"TOPLEFT",self.controls.craftDisplayItem,"TOPRIGHT"}, 8, 0, 120, 20, "Create custom...", function()
 		self:EditDisplayItemText()
 	end)
-	self.controls.displayItemTip = new("LabelControl", {"TOPLEFT",self.controls.craftDisplayItem,"BOTTOMLEFT"}, 0, 8, 100, 16, 
+	self.controls.displayItemTip = new("LabelControl", {"TOPLEFT",self.controls.craftDisplayItem,"BOTTOMLEFT"}, 0, 8, 100, 16,
 [[^7Double-click an item from one of the lists,
 or copy and paste an item from in game (hover over the item and Ctrl+C)
 to view or edit the item and add it to your build.
@@ -261,12 +261,24 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.]]
 		self:UpdateDisplayItemTooltip()
 		self:UpdateDisplayItemRangeLines()
 	end)
+	self.controls.displayItemSectionVariant2 = new("Control", {"TOPLEFT",self.controls.displayItemSectionVariant,"BOTTOMLEFT"}, 0, 0, 0, function()
+		return (self.displayItem.hasAlt2Variant) and 24 or 0
+	end)
+	self.controls.displayItemAlt2Variant = new("DropDownControl", {"TOPLEFT",self.controls.displayItemVariant,"BOTTOMLEFT"}, 0, 2, 224, 20, nil, function(index, value)
+		self.displayItem.variantAlt2 = index
+		self.displayItem:BuildAndParseRaw()
+		self:UpdateDisplayItemTooltip()
+		self:UpdateDisplayItemRangeLines()
+	end)
 	self.controls.displayItemAltVariant.shown = function()
 		return self.displayItem.hasAltVariant
 	end
+	self.controls.displayItemAlt2Variant.shown = function()
+		return self.displayItem.hasAlt2Variant
+	end
 
 	-- Section: Sockets and Links
-	self.controls.displayItemSectionSockets = new("Control", {"TOPLEFT",self.controls.displayItemSectionVariant,"BOTTOMLEFT"}, 0, 0, 0, function()
+	self.controls.displayItemSectionSockets = new("Control", {"TOPLEFT",self.controls.displayItemSectionVariant2,"BOTTOMLEFT"}, 0, 0, 0, function()
 		return self.displayItem.selectableSocketCount > 0 and 28 or 0
 	end)
 	for i = 1, 6 do
@@ -315,7 +327,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.]]
 	self.controls.displayItemAddSocket.shown = function()
 		return #self.displayItem.sockets < self.displayItem.selectableSocketCount + self.displayItem.abyssalSocketCount
 	end
-	
+
 	-- Section: Apply Implicit
 	self.controls.displayItemSectionImplicit = new("Control", {"TOPLEFT",self.controls.displayItemSectionSockets,"BOTTOMLEFT"}, 0, 0, 0, function()
 		return (self.controls.displayItemShaperElder:IsShown() or self.controls.displayItemEnchant:IsShown() or self.controls.displayItemCorrupt:IsShown()) and 28 or 0
@@ -549,6 +561,10 @@ function ItemsTabClass:Load(xml, dbFileName)
 				item.hasAltVariant = true
 				item.variantAlt = tonumber(node.attrib.variantAlt)
 			end
+			if node.attrib.variantAlt2 then
+				item.hasAlt2Variant = true
+				item.variantAlt2 = tonumber(node.attrib.variantAlt2)
+			end
 			for _, child in ipairs(node) do
 				if type(child) == "string" then
 					item:ParseRaw(child)
@@ -606,7 +622,7 @@ function ItemsTabClass:Save(xml)
 	}
 	for _, id in ipairs(self.itemOrderList) do
 		local item = self.items[id]
-		local child = { elem = "Item", attrib = { id = tostring(id), variant = item.variant and tostring(item.variant), variantAlt = item.variantAlt and tostring(item.variantAlt) } }
+		local child = { elem = "Item", attrib = { id = tostring(id), variant = item.variant and tostring(item.variant), variantAlt = item.variantAlt and tostring(item.variantAlt), variantAlt2 = item.variantAlt2 and tostring(item.variantAlt2) } }
 		item:BuildAndParseRaw()
 		t_insert(child, item.raw)
 		for id, modLine in ipairs(item.modLines) do
@@ -671,9 +687,9 @@ function ItemsTabClass:Draw(viewPort, inputEvents)
 	end
 	self.x = self.x - self.controls.scrollBarH.offset
 	self.y = self.y - self.controls.scrollBarV.offset
-	
+
 	for id, event in ipairs(inputEvents) do
-		if event.type == "KeyDown" then	
+		if event.type == "KeyDown" then
 			if event.key == "v" and IsKeyDown("CTRL") then
 				local newItem = Paste()
 				if newItem then
@@ -819,7 +835,7 @@ function ItemsTabClass:EquipItemInSet(item, itemSetId)
 	end
 	self:PopulateSlots()
 	self:AddUndoState()
-	self.build.buildFlag = true	
+	self.build.buildFlag = true
 end
 
 -- Update the item lists for all the slot controls
@@ -882,7 +898,7 @@ function ItemsTabClass:AddItem(item, noAutoEquip, index)
 			end
 		end
 	end
-	
+
 	-- Add it to the list
 	self.items[item.id] = item
 	item:BuildModList()
@@ -995,6 +1011,10 @@ function ItemsTabClass:SetDisplayItem(item)
 			self.controls.displayItemAltVariant.list = item.variantList
 			self.controls.displayItemAltVariant.selIndex = item.variantAlt
 		end
+		if item.hasAlt2Variant then
+			self.controls.displayItemAlt2Variant.list = item.variantList
+			self.controls.displayItemAlt2Variant.selIndex = item.variantAlt2
+		end
 		self:UpdateSocketControls()
 		if item.crafted then
 			self:UpdateAffixControls()
@@ -1029,7 +1049,7 @@ function ItemsTabClass:UpdateAffixControls()
 	for i = 1, item.affixLimit/2 do
 		self:UpdateAffixControl(self.controls["displayItemAffix"..i], item, "Prefix", "prefixes", i)
 		self:UpdateAffixControl(self.controls["displayItemAffix"..(i+item.affixLimit/2)], item, "Suffix", "suffixes", i)
-	end	
+	end
 end
 
 function ItemsTabClass:UpdateAffixControl(control, item, type, outputTable, outputIndex)
@@ -1154,13 +1174,13 @@ function ItemsTabClass:UpdateCustomControls()
 						label = label:sub(1, DrawStringCursorIndex(16, "VAR", label, 310, 10)) .. "..."
 					end
 					self.controls["displayItemCustomModifier"..i].label = label
-					self.controls["displayItemCustomModifierLabel"..i].label = modLine.crafted and "^7Crafted:" or "^7Custom:"
+					self.controls["displayItemCustomModifierLabel"..i].label = ((modLine.prefix and "^1[P] ") or (modLine.suffix and "^2[S] ") or "") .. (modLine.crafted and "^7Crafted:" or "^7Custom:")
 					self.controls["displayItemCustomModifierRemove"..i].onClick = function()
 						t_remove(item.modLines, index)
 						local id = item.id
 						self:CreateDisplayItemFromRaw(item:BuildRaw())
 						self.displayItem.id = id
-					end				
+					end
 					i = i + 1
 				end
 			end
@@ -1359,7 +1379,7 @@ function ItemsTabClass:EditDisplayItemText()
 			tooltip:AddLine(14, "For Normal and Magic items, the base name must be somewhere in the first line. E.g:")
 			tooltip:AddLine(14, "Scholar's Platinum Kris of Joy")
 		end
-	end	
+	end
 	controls.cancel = new("ButtonControl", nil, 45, 470, 80, 20, "Cancel", function()
 		main:ClosePopup()
 	end)
@@ -1368,7 +1388,7 @@ end
 
 -- Opens the item enchanting popup
 function ItemsTabClass:EnchantDisplayItem()
-	local controls = { } 
+	local controls = { }
 	local enchantments = self.displayItem.enchantments
 	local haveSkills = not self.displayItem.enchantments[self.build.data.labyrinths[1].name]
 	local skillList = { }
@@ -1417,7 +1437,7 @@ function ItemsTabClass:EnchantDisplayItem()
 	local function enchantItem()
 		local item = new("Item", self.build.targetVersion, self.displayItem:BuildRaw())
 		item.id = self.displayItem.id
-		for i = 1, item.implicitLines do 
+		for i = 1, item.implicitLines do
 			t_remove(item.modLines, 1)
 		end
 		local list = haveSkills and enchantments[controls.skill.list[controls.skill.selIndex]] or enchantments
@@ -1459,7 +1479,7 @@ function ItemsTabClass:EnchantDisplayItem()
 	controls.save.tooltipFunc = function(tooltip)
 		tooltip:Clear()
 		self:AddItemTooltip(tooltip, enchantItem(), nil, true)
-	end	
+	end
 	controls.close = new("ButtonControl", nil, 45, 100, 80, 20, "Cancel", function()
 		main:ClosePopup()
 	end)
@@ -1468,7 +1488,7 @@ end
 
 -- Opens the item corrupting popup
 function ItemsTabClass:CorruptDisplayItem()
-	local controls = { } 
+	local controls = { }
 	local implicitList = { }
 	for modId, mod in pairs(self.displayItem.affixes) do
 		if mod.type == "Corrupted" and self.displayItem:GetModSpawnWeight(mod) > 0 then
@@ -1510,7 +1530,7 @@ function ItemsTabClass:CorruptDisplayItem()
 			end
 		end
 		if #newImplicit > 0 then
-			for i = 1, item.implicitLines do 
+			for i = 1, item.implicitLines do
 				t_remove(item.modLines, 1)
 			end
 			for i, implicit in ipairs(newImplicit) do
@@ -1538,7 +1558,7 @@ function ItemsTabClass:CorruptDisplayItem()
 	controls.save.tooltipFunc = function(tooltip)
 		tooltip:Clear()
 		self:AddItemTooltip(tooltip, corruptItem(), nil, true)
-	end	
+	end
 	controls.close = new("ButtonControl", nil, 45, 70, 80, 20, "Cancel", function()
 		main:ClosePopup()
 	end)
@@ -1559,13 +1579,36 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 					if craft.master then
 						label = craft.master .. " " .. craft.masterLevel .. "   "..craft.type:sub(1,3).."^8[" .. table.concat(craft, "/") .. "]"
 					else
-						label = table.concat(craft, "/")
+						local unlock = "Recipe"
+						if craft.affix == "Chosen" or craft.affix == "of the Order" then
+							unlock = "Veiled"
+						end
+						label = craft.type:sub(1,3) .. " ^8[" .. unlock .. "] ^2" .. table.concat(craft, "/")
 					end
 					t_insert(modList, {
 						label = label,
 						mod = craft,
 						type = "crafted",
+						affix = craft.type:lower(),
 					})
+				end
+			end
+		elseif sourceId == "FOSSIL" then
+			for _, mod in ipairs(self.build.data.fossilMods) do
+				for _, tag in ipairs(mod.types) do
+					applies = false
+					if self.displayItem.base.tags[tag] then
+						applies = true
+					end
+					if applies then
+						t_insert(modList, {
+							label = mod.type:sub(1,3) .. " ^8[" .. mod.fossil:match("(%w+)") .. "] ^2" .. table.concat(mod, "/"),
+							mod = mod,
+							type = "custom",
+							fossil = mod.fossil,
+							affix = mod.type:lower(),
+						})
+					end
 				end
 			end
 		elseif sourceId == "ESSENCE" then
@@ -1573,15 +1616,16 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 				local modId = essence.mods[self.displayItem.type]
 				local mod = self.displayItem.affixes[modId]
 				t_insert(modList, {
-					label = essence.name .. "   "..mod.type:sub(1,3).."^8[" .. table.concat(mod, "/") .. "]",
+					label = mod.type:sub(1,3) .. " ^8[" .. essence.name .. "] ^2" .. table.concat(mod, "/"),
 					mod = mod,
 					type = "custom",
 					essence = essence,
+					affix = mod.type:lower(),
 				})
 			end
 			table.sort(modList, function(a, b)
 				if a.essence.type ~= b.essence.type then
-					return a.essence.type > b.essence.type 
+					return a.essence.type > b.essence.type
 				else
 					return a.essence.tier > b.essence.tier
 				end
@@ -1593,10 +1637,11 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 						label = mod.affix .. "   ^8[" .. table.concat(mod, "/") .. "]",
 						mod = mod,
 						type = "custom",
+						affix = sourceId:lower(),
 					})
 				end
 			end
-			table.sort(modList, function(a, b) 
+			table.sort(modList, function(a, b)
 				local modA = a.mod
 				local modB = b.mod
 				for i = 1, m_max(#modA, #modB) do
@@ -1622,6 +1667,7 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 		t_insert(sourceList, { label = "Prefix", sourceId = "PREFIX" })
 		t_insert(sourceList, { label = "Suffix", sourceId = "SUFFIX" })
 	end
+	t_insert(sourceList, { label = "Fossil", sourceId = "FOSSIL" })
 	t_insert(sourceList, { label = "Custom", sourceId = "CUSTOM" })
 	buildMods(sourceList[1].sourceId)
 	local function addModifier()
@@ -1635,7 +1681,7 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 		else
 			local listMod = modList[controls.modSelect.selIndex]
 			for _, line in ipairs(listMod.mod) do
-				t_insert(item.modLines, { line = line, [listMod.type] = true })
+				t_insert(item.modLines, { line = line, [listMod.type] = true, [listMod.affix] = true })
 			end
 		end
 		item:BuildAndParseRaw()
@@ -1671,11 +1717,11 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 	controls.save.tooltipFunc = function(tooltip)
 		tooltip:Clear()
 		self:AddItemTooltip(tooltip, addModifier())
-	end	
+	end
 	controls.close = new("ButtonControl", nil, 45, 75, 80, 20, "Cancel", function()
 		main:ClosePopup()
 	end)
-	main:OpenPopup(710, 105, "Add Modifier to Item", controls, "save", sourceList[controls.source.selIndex].sourceId == "CUSTOM" and "custom")	
+	main:OpenPopup(710, 105, "Add Modifier to Item", controls, "save", sourceList[controls.source.selIndex].sourceId == "CUSTOM" and "custom")
 end
 
 function ItemsTabClass:AddItemSetTooltip(tooltip, itemSet)
@@ -1772,7 +1818,7 @@ function ItemsTabClass:AddItemTooltip(tooltip, item, slot, dbMode)
 			end
 			tooltip:AddLine(16, elemLine)
 			tooltip:AddLine(16, s_format("^x7F7F7FElemental DPS: "..colorCodes.MAGIC.."%.1f", weaponData.ElementalDPS))
-			totalDamageTypes = totalDamageTypes + 1	
+			totalDamageTypes = totalDamageTypes + 1
 		end
 		if weaponData.ChaosDPS then
 			tooltip:AddLine(16, s_format("^x7F7F7FChaos Damage: "..colorCodes.CHAOS.."%d-%d "..colorCodes.MAGIC.."(%.1f DPS)", weaponData.ChaosMin, weaponData.ChaosMax, weaponData.ChaosDPS))
@@ -1811,14 +1857,14 @@ function ItemsTabClass:AddItemTooltip(tooltip, item, slot, dbMode)
 			tooltip:AddLine(16, s_format("^x7F7F7FQuality: "..colorCodes.MAGIC.."+%d%%", item.quality))
 		end
 		if flaskData.lifeTotal then
-			tooltip:AddLine(16, s_format("^x7F7F7FRecovers %s%d ^x7F7F7FLife over %s%.1f0 ^x7F7F7FSeconds", 
+			tooltip:AddLine(16, s_format("^x7F7F7FRecovers %s%d ^x7F7F7FLife over %s%.1f0 ^x7F7F7FSeconds",
 				main:StatColor(flaskData.lifeTotal, base.flask.life), flaskData.lifeTotal,
 				main:StatColor(flaskData.duration, base.flask.duration), flaskData.duration
 			))
 		end
 		if flaskData.manaTotal then
-			tooltip:AddLine(16, s_format("^x7F7F7FRecovers %s%d ^x7F7F7FMana over %s%.1f0 ^x7F7F7FSeconds", 
-				main:StatColor(flaskData.manaTotal, base.flask.mana), flaskData.manaTotal, 
+			tooltip:AddLine(16, s_format("^x7F7F7FRecovers %s%d ^x7F7F7FMana over %s%.1f0 ^x7F7F7FSeconds",
+				main:StatColor(flaskData.manaTotal, base.flask.mana), flaskData.manaTotal,
 				main:StatColor(flaskData.duration, base.flask.duration), flaskData.duration
 			))
 		end
@@ -1888,8 +1934,8 @@ function ItemsTabClass:AddItemTooltip(tooltip, item, slot, dbMode)
 	tooltip:AddSeparator(10)
 
 	-- Requirements
-	self.build:AddRequirementsToTooltip(tooltip, item.requirements.level, 
-		item.requirements.strMod, item.requirements.dexMod, item.requirements.intMod, 
+	self.build:AddRequirementsToTooltip(tooltip, item.requirements.level,
+		item.requirements.strMod, item.requirements.dexMod, item.requirements.intMod,
 		item.requirements.str or 0, item.requirements.dex or 0, item.requirements.int or 0)
 
 	-- Implicit/explicit modifiers

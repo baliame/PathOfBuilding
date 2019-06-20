@@ -189,8 +189,8 @@ function ModStoreClass:EvalMod(mod, cfg)
 			end
 			local mult = m_floor(base / (tag.div or 1) + 0.0001)
 			local limitTotal
-			if tag.limit or tag.limitVar then
-				local limit = tag.limit or self:GetMultiplier(tag.limitVar, cfg)
+			if tag.limit or tag.limitVar or tag.limitMod then
+				local limit = tag.limit or (tag.limitVar and self:GetMultiplier(tag.limitVar, cfg)) or self:Sum("BASE", cfg, tag.limitMod)
 				if tag.limitTotal then
 					limitTotal = limit
 				else
@@ -255,7 +255,7 @@ function ModStoreClass:EvalMod(mod, cfg)
 					limitTotal = limit
 				else
 					mult = m_min(mult, limit)
-				end 
+				end
 			end
 			if type(value) == "table" then
 				value = copyTable(value)
@@ -407,6 +407,6 @@ function ModStoreClass:EvalMod(mod, cfg)
 				return
 			end
 		end
-	end	
+	end
 	return value
 end

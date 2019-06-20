@@ -696,6 +696,7 @@ skills["Bladestorm"] = {
 		"blind_art_variation",
 		"is_area_damage",
 		"console_skill_dont_chase",
+		"skill_can_add_multiple_charges_per_action",
 	},
 	statInterpolation = { 1, 1, 1, 1, 1, },
 	levels = {
@@ -1382,6 +1383,12 @@ skills["PuresteelBanner"] = {
 	statMap = {
 		["puresteel_banner_accuracy_rating_+%_final"] = {
 			mod("Accuracy", "MORE", nil, 0, 0, { type = "GlobalEffect", effectType = "AuraDebuff" }),
+		},
+		["attacks_impale_on_hit_%_chance"] = {
+			mod("ImpaleChance", "BASE", nil, ModFlag.Attack, 0, { type = "GlobalEffect", effectType = "Aura" }),
+		},
+		["impale_debuff_effect_+%"] = {
+			mod("ImpaleEffect", "INC", nil, 0, 0, { type = "GlobalEffect", effectType = "Aura" }),
 		},
 	},
 	baseFlags = {
@@ -3172,6 +3179,7 @@ skills["BloodSpears"] = {
 	stats = {
 		"blood_spears_base_number_of_spears",
 		"blood_spears_damage_+%_final_in_blood_stance",
+		"is_area_damage",
 	},
 	statInterpolation = { 1, 1, },
 	levels = {
@@ -3471,7 +3479,7 @@ skills["FireImpurity"] = {
 		["impurity_fire_damage_taken_+%_final"] = {
 			mod("FireDamageTaken", "MORE", nil, 0, 0, { type = "GlobalEffect", effectType = "Aura" }),
 		},
-	},	
+	},
 	baseFlags = {
 		spell = true,
 		aura = true,

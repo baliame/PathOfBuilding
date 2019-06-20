@@ -51,7 +51,7 @@ end
 -- Merge skill modifiers with given mod list
 function calcs.mergeSkillInstanceMods(env, modList, skillEffect, extraStats)
 	calcLib.validateGemLevel(skillEffect)
-	local grantedEffect = skillEffect.grantedEffect	
+	local grantedEffect = skillEffect.grantedEffect
 	local stats = calcLib.buildSkillInstanceStats(skillEffect, grantedEffect)
 	if extraStats and extraStats[1] then
 		for _, stat in pairs(extraStats) do
@@ -83,7 +83,7 @@ function calcs.createActiveSkill(activeEffect, supportList, actor, socketGroup, 
 	}
 
 	local activeGrantedEffect = activeEffect.grantedEffect
-	
+
 	-- Initialise skill types
 	activeSkill.skillTypes = copyTable(activeGrantedEffect.skillTypes)
 	if activeGrantedEffect.minionSkillTypes then
@@ -130,7 +130,7 @@ local function getWeaponFlags(env, weaponData, weaponTypes)
 	if not info then
 		return
 	end
-	if weaponTypes and not weaponTypes[weaponData.type] and 
+	if weaponTypes and not weaponTypes[weaponData.type] and
 		(not weaponData.countsAsAll1H or not (weaponTypes["Claw"] or weaponTypes["Dagger"] or weaponTypes["One Handed Axe"] or weaponTypes["One Handed Mace"] or weaponTypes["One Handed Sword"])) then
 		return nil, info
 	end
@@ -417,7 +417,7 @@ function calcs.buildActiveSkillModList(env, activeSkill)
 	if level.cooldown then
 		activeSkill.skillData.cooldown = level.cooldown
 	end
-	
+
 	-- Add extra modifiers from other sources
 	activeSkill.extraSkillModList = { }
 	for _, value in ipairs(skillModList:List(activeSkill.skillCfg, "ExtraSkillMod")) do
@@ -471,7 +471,7 @@ function calcs.buildActiveSkillModList(env, activeSkill)
 			minion.minionData = env.data.minions[minionType]
 			minion.level = activeSkill.skillData.minionLevelIsEnemyLevel and env.enemyLevel or activeSkill.skillData.minionLevel or activeEffect.grantedEffectLevel.levelRequirement
 			-- fix minion level between 1 and 100
-			minion.level = m_min(m_max(minion.level,1),100) 
+			minion.level = m_min(m_max(minion.level,1),100)
 			minion.itemList = { }
 			minion.uses = activeGrantedEffect.minionUses
 			minion.lifeTable = isSpectre and env.data.monsterLifeTable or env.data.monsterAllyLifeTable
@@ -514,7 +514,7 @@ function calcs.buildActiveSkillModList(env, activeSkill)
 						minion.weaponData1 = env.player.weaponData1
 					end
 				end
-				if minion.uses["Weapon 2"] then	
+				if minion.uses["Weapon 2"] then
 					if minion.itemSet then
 						local item = env.build.itemsTab.items[minion.itemSet[minion.itemSet.useSecondWeaponSet and "Weapon 2 Swap" or "Weapon 2"].selItemId]
 						if item and item.weaponData then
@@ -640,7 +640,7 @@ function calcs.createMinionSkills(env, activeSkill)
 		minionSkill.skillData.damageEffectiveness = 1 + (activeSkill.skillData.minionDamageEffectiveness or 0) / 100
 		t_insert(minion.activeSkillList, minionSkill)
 	end
-	local skillIndex 
+	local skillIndex
 	if env.mode == "CALCS" then
 		skillIndex = m_max(m_min(activeEffect.srcInstance.skillMinionSkillCalcs or 1, #minion.activeSkillList), 1)
 		activeEffect.srcInstance.skillMinionSkillCalcs = skillIndex

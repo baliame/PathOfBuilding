@@ -1365,6 +1365,12 @@ skills["SupportImpale"] = {
 	excludeSkillTypes = { },
 	statDescriptionScope = "gem_stat_descriptions",
 	statMap = {
+		["attacks_impale_on_hit_%_chance"] = {
+			mod("ImpaleChance", "BASE", nil, ModFlag.Attack),
+		},
+		["impale_debuff_effect_+%"] = {
+			mod("ImpaleEffect", "INC", nil),
+		},
 		["impale_support_physical_damage_+%_final"] = {
 			mod("PhysicalDamage", "MORE", nil),
 		},
@@ -1763,7 +1769,7 @@ skills["SupportMultiTrap"] = {
 	addSkillTypes = { },
 	excludeSkillTypes = { },
 	statDescriptionScope = "gem_stat_descriptions",
-	statMap = {	
+	statMap = {
 		["support_multithrow_damage_+%_final"] = {
 			mod("Damage", "MORE", nil),
 		},

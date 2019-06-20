@@ -15,7 +15,7 @@ local ItemClass = newClass("Item", function(self, targetVersion, raw)
 	self.targetVersion = targetVersion
 	if raw then
 		self:ParseRaw(itemLib.sanitiseItemText(raw))
-	end	
+	end
 end)
 
 -- Parse raw item data and extract item name, base type, quality, and modifiers
@@ -101,7 +101,7 @@ function ItemClass:ParseRaw(raw)
 	self.buffLines = 0
 	if self.base then
 		self.affixes = (self.base.subType and verData.itemMods[self.base.type..self.base.subType])
-			or verData.itemMods[self.base.type] 
+			or verData.itemMods[self.base.type]
 			or verData.itemMods.Item
 		self.enchantments = verData.enchantments[self.base.type]
 		self.corruptable = self.base.type ~= "Flask"
@@ -215,10 +215,14 @@ function ItemClass:ParseRaw(raw)
 					self.requirements.level = tonumber(specVal)
 				elseif specName == "Has Alt Variant" then
 					self.hasAltVariant = true
+				elseif specName == "Has Third Variant" then
+					self.hasAlt2Variant = true
 				elseif specName == "Selected Variant" then
 					self.variant = tonumber(specVal)
 				elseif specName == "Selected Alt Variant" then
 					self.variantAlt = tonumber(specVal)
+				elseif specName == "Selected Third Variant" then
+					self.variantAlt2 = tonumber(specVal)
 				elseif specName == "League" then
 					self.league = specVal
 				elseif specName == "Crafted" then
@@ -276,6 +280,8 @@ function ItemClass:ParseRaw(raw)
 				local rangeSpec = line:match("{range:([%d.]+)}")
 				local crafted = line:match("{crafted}") or line:match(" %(crafted%)")
 				local custom = line:match("{custom}")
+				local prefix = line:match("{prefix}")
+				local suffix = line:match("{suffix}")
 				line = line:gsub("%b{}", ""):gsub(" %(fractured%)",""):gsub(" %(crafted%)","")
 				local rangedLine
 				if line:match("%(%d+%-%d+ to %d+%-%d+%)") or line:match("%(%-?[%d%.]+ to %-?[%d%.]+%)") or line:match("%(%-?[%d%.]+%-[%d%.]+%)") then
@@ -297,7 +303,7 @@ function ItemClass:ParseRaw(raw)
 					end
 				end
 				if modList then
-					t_insert(self.modLines, { line = line, extra = extra, modList = modList, variantList = variantList, crafted = crafted, custom = custom, fractured = fractured, range = rangedLine and (tonumber(rangeSpec) or 0.5) })
+					t_insert(self.modLines, { line = line, extra = extra, modList = modList, variantList = variantList, crafted = crafted, custom = custom, prefix = prefix, suffix = suffix, fractured = fractured, range = rangedLine and (tonumber(rangeSpec) or 0.5) })
 					if mode == "GAME" then
 						if gameModeStage == "FINDIMPLICIT" then
 							gameModeStage = "IMPLICIT"
@@ -312,12 +318,12 @@ function ItemClass:ParseRaw(raw)
 					end
 				elseif mode == "GAME" then
 					if gameModeStage == "IMPLICIT" or gameModeStage == "EXPLICIT" then
-						t_insert(self.modLines, { line = line, extra = line, modList = { }, variantList = variantList, crafted = crafted, custom = custom, fractured = fractured })
+						t_insert(self.modLines, { line = line, extra = line, modList = { }, variantList = variantList, crafted = crafted, custom = custom, prefix = prefix, suffix = suffix, fractured = fractured })
 					elseif gameModeStage == "FINDEXPLICIT" then
 						gameModeStage = "DONE"
 					end
 				elseif foundExplicit then
-					t_insert(self.modLines, { line = line, extra = line, modList = { }, variantList = variantList, crafted = crafted, custom = custom, fractured = fractured })
+					t_insert(self.modLines, { line = line, extra = line, modList = { }, variantList = variantList, crafted = crafted, custom = custom, prefix = prefix, suffix = suffix, fractured = fractured })
 				end
 			end
 		end
@@ -340,7 +346,7 @@ function ItemClass:ParseRaw(raw)
 	end
 	self.affixLimit = 0
 	if self.crafted then
-		if not self.affixes then 
+		if not self.affixes then
 			self.crafted = false
 		elseif self.rarity == "MAGIC" then
 			self.affixLimit = 2
@@ -384,6 +390,9 @@ function ItemClass:ParseRaw(raw)
 		self.variant = m_min(#self.variantList, self.variant or self.defaultVariant or #self.variantList)
 		if self.hasAltVariant then
 			self.variantAlt = m_min(#self.variantList, self.variantAlt or self.defaultVariant or #self.variantList)
+			if self.hasAlt2Variant then
+				self.variantAlt2 = m_min(#self.variantList, self.variantAlt2 or self.defaultVariant or #self.variantList)
+			end
 		end
 	end
 	if not self.quality then
@@ -395,11 +404,11 @@ end
 function ItemClass:NormaliseQuality()
 	if self.base and (self.base.armour or self.base.weapon or self.base.flask) then
 		if not self.quality then
-			self.quality = self.corrupted and 0 or 20 
+			self.quality = self.corrupted and 0 or 20
 		elseif not self.uniqueID and not self.corrupted then
 			self.quality = 20
 		end
-	end	
+	end
 end
 
 function ItemClass:GetModSpawnWeight(mod, extraTags)
@@ -457,6 +466,10 @@ function ItemClass:BuildRaw()
 		if self.hasAltVariant then
 			t_insert(rawLines, "Has Alt Variant: true")
 			t_insert(rawLines, "Selected Alt Variant: "..self.variantAlt)
+			if self.hasAlt2Variant then
+				t_insert(rawLines, "Has Third Variant: true")
+				t_insert(rawLines, "Selected Third Variant: "..self.variantAlt2)
+			end
 		end
 	end
 	if self.quality then
@@ -493,6 +506,12 @@ function ItemClass:BuildRaw()
 			end
 			if modLine.custom then
 				line = "{custom}" .. line
+			end
+			if modLine.prefix then
+				line = "{prefix}" .. line
+			end
+			if modLine.suffix then
+				line = "{suffix}" .. line
 			end
 			if modLine.fractured then
 				line = "{fractured}" .. line
@@ -566,7 +585,7 @@ function ItemClass:Craft()
 							end
 						end
 						statOrder[order] = modLine
-					end	
+					end
 				end
 			end
 		end
@@ -578,9 +597,10 @@ function ItemClass:Craft()
 end
 
 function ItemClass:CheckModLineVariant(modLine)
-	return not modLine.variantList 
+	return not modLine.variantList
 		or modLine.variantList[self.variant]
 		or (self.hasAltVariant and modLine.variantList[self.variantAlt])
+		or (self.hasAlt2Variant and modLine.variantList[self.variantAlt2])
 end
 
 -- Return the name of the slot this item is equipped in
@@ -614,7 +634,7 @@ local function sumLocal(modList, name, type, flags)
 		if mod.name == name and mod.type == type and mod.flags == flags and mod.keywordFlags == 0 and (not mod[1] or mod[1].type == "InSlot") then
 			if type == "FLAG" then
 				result = result or mod.value
-			else	
+			else
 				result = result + mod.value
 			end
 			t_remove(modList, i)
@@ -788,7 +808,7 @@ function ItemClass:BuildModListForSlotNum(baseList, slotNum)
 		for _, value in ipairs(modList:List(nil, "JewelData")) do
 			jewelData[value.key] = value.value
 		end
-	end	
+	end
 	return { unpack(modList) }
 end
 
@@ -865,7 +885,7 @@ function ItemClass:BuildModList()
 		-- Force the socket count to be equal to the stated number
 		self.selectableSocketCount = socketCount
 		local group = 0
-		for i = 1, m_max(socketCount, #self.sockets) do 
+		for i = 1, m_max(socketCount, #self.sockets) do
 			if i > socketCount then
 				self.sockets[i] = nil
 			elseif not self.sockets[i] then

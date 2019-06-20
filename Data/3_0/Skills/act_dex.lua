@@ -1421,6 +1421,7 @@ skills["Cyclone"] = {
 		"cyclone_max_number_of_stages",
 		"is_area_damage",
 		"display_modifiers_to_melee_attack_range_apply_to_skill_radius",
+		"skill_can_add_multiple_charges_per_action",
 	},
 	statInterpolation = { 1, 1, 1, 1, 1, 3, 3, 1, },
 	levels = {
@@ -1513,6 +1514,7 @@ skills["VaalCyclone"] = {
 		"modifiers_to_skill_effect_duration_also_affect_soul_prevention_duration",
 		"cannot_cancel_skill_before_contact_point",
 		"display_modifiers_to_melee_attack_range_apply_to_skill_radius",
+		"skill_can_add_multiple_charges_per_action",
 	},
 	statInterpolation = { 1, 1, 1, 1, 3, 3, },
 	levels = {
