@@ -144,6 +144,6 @@ Adds 1 to 53 Lightning Damage
 +30% to Lightning Resistance
 Herald of Thunder has 74% increased Buff Effect
 When used in the Synthesiser, the new item will have an additional Herald Modifier
-]],
+]]
 
 }

@@ -1231,6 +1231,8 @@ local specialModList = {
 		mod("PhysicalDamageGainAsCold", "BASE", num, nil, ModFlag.Weapon),
 		mod("PhysicalDamageGainAsFire", "BASE", num, nil, ModFlag.Weapon)
 	} end,
+	["increases and reductions to light radius also apply to area of effect at 50%% of their value"] = { flag("LightRadiusAppliesToAreaOfEffect") },
+	["increases and reductions to light radius also apply to damage"] = { flag("LightRadiusAppliesToDamage") },
 	-- Crit
 	["your critical strike chance is lucky"] = { flag("CritChanceLucky") },
 	["your critical strike chance is lucky while focussed"] = { flag("CritChanceLucky", { type = "Condition", var = "Focused"}) },
@@ -1522,6 +1524,7 @@ local specialModList = {
 	["you have zealot's oath if you haven't been hit recently"] = { mod("Keystone", "LIST", "Zealot's Oath", { type = "Condition", var = "BeenHitRecently", neg = true }) },
 	["deal no physical damage"] = { flag("DealNoPhysical") },
 	["deal no elemental damage"] = { flag("DealNoLightning"), flag("DealNoCold"), flag("DealNoFire") },
+	["deal no chaos damage"] = { flag("DealNoChaos") },
 	["deal no non%-elemental damage"] = { flag("DealNoPhysical"), flag("DealNoChaos") },
 	["attacks have blood magic"] = { flag("SkillBloodMagic", nil, ModFlag.Attack) },
 	["(%d+)%% chance to cast a? ?socketed lightning spells? on hit"] = function(num) return { mod("ExtraSupport", "LIST", { name = "SupportUniqueMjolnerLightningSpellsCastOnHit", level = 1 }, { type = "SocketedIn", slotName = "{SlotName}" }) } end,

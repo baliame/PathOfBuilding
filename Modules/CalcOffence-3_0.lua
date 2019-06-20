@@ -224,6 +224,20 @@ function calcs.offence(env, actor, activeSkill)
 			skillModList:NewMod("Accuracy", "INC", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
 		end
 	end
+	if skillModList:Flag(nil, "LightRadiusAppliesToDamage") then
+		-- Light Radius conversion from Wreath of Phrecia
+		for i, value in ipairs(skillModList:Tabulate("INC", { }, "LightRadius")) do
+			local mod = value.mod
+			skillModList:NewMod("Damage", "INC", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
+		end
+	end
+	if skillModList:Flag(nil, "LightRadiusAppliesToAreaOfEffect") then
+		-- Light Radius conversion from Wreath of Phrecia
+		for i, value in ipairs(skillModList:Tabulate("INC", { }, "LightRadius")) do
+			local mod = value.mod
+			skillModList:NewMod("AreaOfEffect", "INC", mod.value * 0.5, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
+		end
+	end
 	if skillModList:Flag(nil, "CastSpeedAppliesToTrapThrowingSpeed") then
 		-- Cast Speed conversion from Slavedriver's Hand
 		for i, value in ipairs(skillModList:Tabulate("INC", { flags = ModFlag.Cast }, "Speed")) do

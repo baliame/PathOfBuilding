@@ -940,5 +940,14 @@ Requires Level 62, 79 Dex, 72 Int
 +(24-30)% to Chaos Resistance
 Enemies cannot Leech Mana from You
 Socketed Gems have 50% reduced Mana Cost
-]],
+]],[[
+Wreath of Phrecia
+Iron Circlet
+Requires Level 8
+Has No Attribute Requirements
+Increases and Reductions to Light Radius also apply to Area of Effect at 50% of their value
+Increases and Reductions to Light Radius also apply to Damage
+20% increased Light Radius
+Deal no Chaos Damage
+]]
 }
