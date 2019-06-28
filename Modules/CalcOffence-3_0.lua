@@ -1001,7 +1001,7 @@ function calcs.offence(env, actor, activeSkill)
 			local lifeLeechTotal = 0
 			local energyShieldLeechTotal = 0
 			local manaLeechTotal = 0
-			local noLifeLeech = skillModList:Flag(cfg, "CannotLeechLife") or enemyDB:Flag(nil, "CannotLeechLifeFromSelf")
+			local noLifeLeech = skillModList:Flag(cfg, "CannotLeechLife") or enemyDB:Flag(nil, "CannotLeechLifeFromSelf") or skillModList:Flag(cfg, "StrengthInBlood")
 			local noEnergyShieldLeech = skillModList:Flag(cfg, "CannotLeechEnergyShield") or enemyDB:Flag(nil, "CannotLeechEnergyShieldFromSelf")
 			local noManaLeech = skillModList:Flag(cfg, "CannotLeechMana") or enemyDB:Flag(nil, "CannotLeechManaFromSelf")
 			for _, damageType in ipairs(dmgTypeList) do

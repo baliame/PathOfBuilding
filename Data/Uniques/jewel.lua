@@ -1170,4 +1170,33 @@ Limited to: 1
 3% increased Character Size
 (4-6)% increased Intelligence
 ]],
+-- Jewel: Historic
+[[
+Lethal Pride
+Timeless Jewel
+Variant: Kaom
+Variant: Kiloava
+Variant: Rakiata
+Limited to: 1
+Radius: Large
+{variant:1}Commanded leadership over (10000-18000) warriors under Kaom
+{variant:2}Commanded leadership over (10000-18000) warriors under Kiloava
+{variant:3}Commanded leadership over (10000-18000) warriors under Rakiata
+Passives in radius are Conquered by the Karui
+Historic
+]],
+[[
+Lethal Pride
+Timeless Jewel
+Variant: Doryani
+Variant: Xibaqua
+Variant: Zerphi
+Limited to: 1
+Radius: Large
+{variant:1}Bathed in the blood of (100-8000) sacrified in the name of Doryani
+{variant:2}Bathed in the blood of (100-8000) sacrified in the name of Xibaqua
+{variant:3}Bathed in the blood of (100-8000) sacrified in the name of Zerphi
+Passives in radius are Conquered by the Vaal
+Historic
+]],
 }

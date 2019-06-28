@@ -14,6 +14,12 @@ local m_max = math.max
 
 local tempTable1 = { }
 
+local historicKeystones = {
+	"StrengthInBlood",
+	"GlancingBlows",
+	"TemperedByWar"
+}
+
 -- Initialise modifier database with stats and conditions common to all actors
 function calcs.initModDB(env, modDB)
 	modDB:NewMod("FireResistMax", "BASE", 75, "Base")
@@ -70,14 +76,40 @@ function calcs.buildModListForNode(env, node)
 	end
 
 	-- Run first pass radius jewels
+	local conqSource = nil
 	for _, rad in pairs(env.radiusJewelList) do
 		if rad.type == "Other" and rad.nodes[node.id] then
-			rad.func(node, modList, rad.data)
+			if rad.caps then
+				rad.func(node, modList, rad.data, rad.caps)
+			else
+				rad.func(node, modList, rad.data)
+			end
+			if not conqSource and modList:Flag(nil, "Conquered") then
+				conqSource = rad.data.modSource
+			end
 		end
 	end
 
 	if modList:Flag(nil, "PassiveSkillHasNoEffect") or (env.allocNodes[node.id] and modList:Flag(nil, "AllocatedPassiveSkillHasNoEffect")) then
 		wipeTable(modList)
+	end
+
+	if modList:Flag(nil, "Conquered") then
+		if node.type == "Keystone" then
+			local granted = nil
+			for _, key in ipairs(historicKeystones) do
+				if modList:Flag(nil, key) then
+					granted = key
+					env.spec.tree.keystoneMap[key] = node
+					break
+				end
+			end
+			wipeTable(modList)
+			if granted then
+				modList:AddMod(modLib.createMod("Keystone", "LIST", granted, conqSource))
+				modList:AddMod(modLib.createMod(granted, "FLAG", true, conqSource))
+			end
+		end
 	end
 
 	-- Apply effect scaling
@@ -384,7 +416,9 @@ function calcs.initEnv(build, mode, override)
 					t_insert(env.radiusJewelList, {
 						nodes = node.nodesInRadius[item.jewelRadiusIndex],
 						func = func.func,
+						trfunc = func.trfunc,
 						type = func.type,
+						caps = func.caps,
 						item = item,
 						nodeId = slot.nodeId,
 						attributes = node.attributesInRadius[item.jewelRadiusIndex],

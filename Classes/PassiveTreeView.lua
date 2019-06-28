@@ -68,7 +68,7 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 
 	local cursorX, cursorY = GetCursorPos()
 	local mOver = cursorX >= viewPort.x and cursorX < viewPort.x + viewPort.width and cursorY >= viewPort.y and cursorY < viewPort.y + viewPort.height
-	
+
 	-- Process input events
 	local treeClick
 	for id, event in ipairs(inputEvents) do
@@ -101,7 +101,7 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 					self:Zoom(IsKeyDown("SHIFT") and 3 or 1, viewPort)
 				elseif event.key == "WHEELDOWN" then
 					self:Zoom(IsKeyDown("SHIFT") and -3 or -1, viewPort)
-				end	
+				end
 			end
 		end
 	end
@@ -199,14 +199,14 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 							-- Node is already in the trace path, remove it first
 							t_remove(self.tracePath, index)
 						end
-						t_insert(self.tracePath, hoverNode)	
+						t_insert(self.tracePath, hoverNode)
 					else
 						hoverNode = nil
 					end
 				end
 			end
 		end
-		-- Use the trace path as the path 
+		-- Use the trace path as the path
 		hoverPath = { }
 		for _, pathNode in pairs(self.tracePath) do
 			hoverPath[pathNode] = true
@@ -311,7 +311,7 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 
 		-- Determine the connector state
 		local state = "Normal"
-		if node1.alloc and node2.alloc then	
+		if node1.alloc and node2.alloc then
 			state = "Active"
 		elseif hoverPath then
 			if (node1.alloc or node1 == hoverNode or hoverPath[node1]) and (node2.alloc or node2 == hoverNode or hoverPath[node2]) then
@@ -393,14 +393,14 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 				end
 			else
 				-- Normal node (includes keystones and notables)
-				base = node.sprites[node.type:lower()..(node.alloc and "Active" or "Inactive")] 
+				base = node.sprites[node.type:lower()..(node.alloc and "Active" or "Inactive")]
 				overlay = node.overlay[state .. (node.ascendancyName and "Ascend" or "")]
 			end
 		end
 
 		-- Convert node position to screen-space
 		local scrX, scrY = treeToScreen(node.x, node.y)
-	
+
 		-- Determine color for the base artwork
 		if node.ascendancyName and node.ascendancyName ~= spec.curAscendClassName then
 			-- By default, fade out nodes from ascendancy classes other than the current one
@@ -436,7 +436,7 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 		else
 			SetDrawColor(1, 1, 1)
 		end
-		
+
 		-- Draw base artwork
 		if base then
 			self:DrawAsset(base, scrX, scrY, scale)
@@ -502,7 +502,7 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 				local radData = build.data.jewelRadius[jewel.jewelRadiusIndex]
 				local size = radData.rad * scale
 				SetDrawColor(radData.col)
-				DrawImage(self.ring, scrX - size, scrY - size, size * 2, size * 2)				
+				DrawImage(self.ring, scrX - size, scrY - size, size * 2, size * 2)
 			end
 		end
 	end
@@ -604,6 +604,19 @@ function PassiveTreeViewClass:AddNodeName(tooltip, node, build)
 end
 
 function PassiveTreeViewClass:AddNodeTooltip(tooltip, node, build)
+	radiusJewelList = {}
+	for _, slot in pairs(build.itemsTab.orderedSlots) do
+		if slot.nodeId and build.spec.allocNodes[slot.nodeId] then
+			item = build.itemsTab.items[build.spec.jewels[slot.nodeId]]
+			if item and item.jewelRadiusIndex then
+				local jewelNode = build.spec.nodes[slot.nodeId]
+				if jewelNode.nodesInRadius[item.jewelRadiusIndex][node.id] then
+					t_insert(radiusJewelList, item.jewelData)
+				end
+			end
+		end
+	end
+
 	-- Special case for sockets
 	if node.type == "Socket" and node.alloc then
 		local socket, jewel = build.itemsTab:GetSocketAndJewelForNodeID(node.id)
@@ -619,7 +632,7 @@ function PassiveTreeViewClass:AddNodeTooltip(tooltip, node, build)
 		tooltip:AddLine(14, colorCodes.TIP.."Tip: Hold Shift to hide this tooltip.")
 		return
 	end
-	
+
 	-- Node name
 	self:AddNodeName(tooltip, node, build)
 	if launch.devModeAlt then
@@ -632,8 +645,35 @@ function PassiveTreeViewClass:AddNodeTooltip(tooltip, node, build)
 	-- Node description
 	if node.sd[1] then
 		tooltip:AddLine(16, "")
+
+		if #radiusJewelList then
+			any_tr = false
+			tr = node.sd
+			for _, jewel in ipairs(radiusJewelList) do
+				for _, funcs in ipairs(jewel.funcList) do
+					if funcs.trfunc then
+						any_tr = true
+						tr = funcs.trfunc(node, tr)
+					end
+				end
+			end
+
+			if any_tr then
+				tooltip:AddLine(16, "^7Node is modified to: ")
+				if #tr > 0 then
+					for _, line in ipairs(tr) do
+						tooltip:AddLine(16, colorCodes.MAGIC .. line)
+					end
+				else
+					tooltip:AddLine(16, colorCodes.UNSUPPORTED .. "[No effect]")
+				end
+				tooltip:AddLine(16, "")
+				tooltip:AddLine(16, "^7Original node:")
+			end
+		end
+
 		for i, line in ipairs(node.sd) do
-			if node.mods[i].list then
+			if line and node.mods[i].list then
 				if launch.devModeAlt then
 					-- Modifier debugging info
 					local modStr

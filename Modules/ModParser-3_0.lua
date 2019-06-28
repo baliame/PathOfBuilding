@@ -1575,6 +1575,9 @@ local specialModList = {
 	["winter orb has %+(%d+) maximum stages"] = function(num) return { mod("Multiplier:WinterOrbMaxStage", "BASE", num) } end,
 	["winter orb has (%d+)%% increased area of effect per stage"] = function(num) return { mod("AreaOfEffect", "INC", num, { type = "SkillName", skillName = "Winter Orb"}, { type = "Multiplier", var = "WinterOrbStage" }) } end,
 	["wave of conviction's exposure applies (%-%d+)%% elemental resistance"] = function(num) return { mod("ExtraSkillStat", "LIST", { key = "purge_expose_resist_%_matching_highest_element_damage", value = num }, { type = "SkillName", skillName = "Wave of Conviction" }) } end,
+	-- Timeless keystone mods
+	["chance to block attack damage is doubled"] = { mod("BlockChance", "MORE", 100) },
+	["chance to block spell damage is doubled"] = { mod("SpellBlockChance", "MORE", 100) },
 	-- Display-only modifiers
 	["prefixes:"] = { },
 	["suffixes:"] = { },
@@ -1725,6 +1728,112 @@ for gemId, gemData in pairs(data["3_0"].gems) do
 	end
 end
 
+local function trChain(fn1, fn2)
+	return function(node, sd)
+		return fn2(node, fn1(node, sd))
+	end
+end
+
+local function getGsub(srcText, dstText)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				subst = src:gsub(srcText, dstText)
+				t_insert(tr, subst)
+			end
+		end
+		return tr
+	end
+end
+
+local function getGsubMulti(srcTexts, dstText)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				subst = src
+				for _, srcText in pairs(srcTexts) do
+					subst = subst:gsub(srcText, dstText)
+				end
+				t_insert(tr, subst)
+			end
+		end
+		return tr
+	end
+end
+
+local function getRewrite(srcText, dstText, factor)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				val = src:match(srcText)
+				if val then
+					val = tostring(math.floor(tonumber(val) * factor))
+					ndstText = dstText:gsub("%%1", val)
+					subst = src:gsub(srcText, ndstText)
+					t_insert(tr, subst)
+				else
+					t_insert(tr, src)
+				end
+			end
+		end
+		return tr
+	end
+end
+
+local function getDup(ifMatches, srcText, dstText)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				t_insert(tr, src)
+				if src:match(ifMatches) then
+					subst = src:gsub(srcText, dstText)
+					t_insert(tr, subst)
+				end
+			end
+		end
+		return tr
+	end
+end
+
+local function getDupRewrite(ifMatches, srcText, dstText, factor)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				t_insert(tr, src)
+				if src:match(ifMatches) then
+					val = src:match(srcText)
+					if val then
+						val = tostring(math.floor(tonumber(val) * factor))
+						ndstText = dstText:gsub("%%1", val)
+						subst = src:gsub(srcText, ndstText)
+						t_insert(tr, subst)
+					end
+				end
+			end
+		end
+		return tr
+	end
+end
+
+local function getRem(ifMatches)
+	return function(node, sd)
+		tr = {}
+		if node and sd then
+			for _, src in pairs(sd) do
+				if src:match(ifMatches) then
+					t_insert(tr, src)
+				end
+			end
+		end
+		return tr
+	end
+end
+
 -- Radius jewels that modify other nodes
 local function getSimpleConv(srcList, dst, type, remove, factor)
 	return function(node, out, data)
@@ -1747,22 +1856,22 @@ local function getSimpleConv(srcList, dst, type, remove, factor)
 	end
 end
 local jewelOtherFuncs = {
-	["Strength from Passives in Radius is Transformed to Dexterity"] = getSimpleConv({"Str"}, "Dex", "BASE", true),
-	["Dexterity from Passives in Radius is Transformed to Strength"] = getSimpleConv({"Dex"}, "Str", "BASE", true),
-	["Strength from Passives in Radius is Transformed to Intelligence"] = getSimpleConv({"Str"}, "Int", "BASE", true),
-	["Intelligence from Passives in Radius is Transformed to Strength"] = getSimpleConv({"Int"}, "Str", "BASE", true),
-	["Dexterity from Passives in Radius is Transformed to Intelligence"] = getSimpleConv({"Dex"}, "Int", "BASE", true),
-	["Intelligence from Passives in Radius is Transformed to Dexterity"] = getSimpleConv({"Int"}, "Dex", "BASE", true),
-	["Increases and Reductions to Life in Radius are Transformed to apply to Energy Shield"] = getSimpleConv({"Life"}, "EnergyShield", "INC", true),
-	["Increases and Reductions to Energy Shield in Radius are Transformed to apply to Armour at 200% of their value"] = getSimpleConv({"EnergyShield"}, "Armour", "INC", true, 2),
-	["Increases and Reductions to Life in Radius are Transformed to apply to Mana at 200% of their value"] = getSimpleConv({"Life"}, "Mana", "INC", true, 2),
-	["Increases and Reductions to Physical Damage in Radius are Transformed to apply to Cold Damage"] = getSimpleConv({"PhysicalDamage"}, "ColdDamage", "INC", true),
-	["Increases and Reductions to Cold Damage in Radius are Transformed to apply to Physical Damage"] = getSimpleConv({"ColdDamage"}, "PhysicalDamage", "INC", true),
-	["Increases and Reductions to other Damage Types in Radius are Transformed to apply to Fire Damage"] = getSimpleConv({"PhysicalDamage","ColdDamage","LightningDamage","ChaosDamage"}, "FireDamage", "INC", true),
-	["Passives granting Lightning Resistance or all Elemental Resistances in Radius also grant Chance to Block Spells at 35% of its value"] = getSimpleConv({"LightningResist","ElementalResist"}, "SpellBlockChance", "BASE", false, 0.35),
-	["Passives granting Cold Resistance or all Elemental Resistances in Radius also grant Chance to Dodge Attacks at 35% of its value"] = getSimpleConv({"ColdResist","ElementalResist"}, "AttackDodgeChance", "BASE", false, 0.35),
-	["Passives granting Fire Resistance or all Elemental Resistances in Radius also grant Chance to Block at 35% of its value"] = getSimpleConv({"FireResist","ElementalResist"}, "BlockChance", "BASE", false, 0.35),
-	["Melee and Melee Weapon Type modifiers in Radius are Transformed to Bow Modifiers"] = function(node, out, data)
+	["Strength from Passives in Radius is Transformed to Dexterity"] = {getSimpleConv({"Str"}, "Dex", "BASE", true), getGsub("(%d+) to Strength", "%1 to Dexterity")},
+	["Dexterity from Passives in Radius is Transformed to Strength"] = {getSimpleConv({"Dex"}, "Str", "BASE", true), getGsub("(%d+) to Dexterity", "%1 to Strength")},
+	["Strength from Passives in Radius is Transformed to Intelligence"] = {getSimpleConv({"Str"}, "Int", "BASE", true), getGsub("(%d+) to Strength", "%1 to Intelligence")},
+	["Intelligence from Passives in Radius is Transformed to Strength"] = {getSimpleConv({"Int"}, "Str", "BASE", true), getGsub("(%d+) to Intelligence", "%1 to Strength")},
+	["Dexterity from Passives in Radius is Transformed to Intelligence"] = {getSimpleConv({"Dex"}, "Int", "BASE", true), getGsub("(%d+) to Dexterity", "%1 to Intelligence")},
+	["Intelligence from Passives in Radius is Transformed to Dexterity"] = {getSimpleConv({"Int"}, "Dex", "BASE", true), getGsub("(%d+) to Intelligence", "%1 to Dexterity")},
+	["Increases and Reductions to Life in Radius are Transformed to apply to Energy Shield"] = {getSimpleConv({"Life"}, "EnergyShield", "INC", true), getGsub("increased maximum Life", "increased maximum Energy Shield")},
+	["Increases and Reductions to Energy Shield in Radius are Transformed to apply to Armour at 200% of their value"] = {getSimpleConv({"EnergyShield"}, "Armour", "INC", true, 2), getRewrite("(%d+)%% increased maximum Energy Shield", "%1%% increased Armour", 2)},
+	["Increases and Reductions to Life in Radius are Transformed to apply to Mana at 200% of their value"] = {getSimpleConv({"Life"}, "Mana", "INC", true, 2), getRewrite("(%d+)%% increased maximum Life", "%1%% increased maximum Mana", 2)},
+	["Increases and Reductions to Physical Damage in Radius are Transformed to apply to Cold Damage"] = {getSimpleConv({"PhysicalDamage"}, "ColdDamage", "INC", true), getGsub("increased(.*)Physical Damage", "increased%1Cold Damage")},
+	["Increases and Reductions to Cold Damage in Radius are Transformed to apply to Physical Damage"] = {getSimpleConv({"ColdDamage"}, "PhysicalDamage", "INC", true), getGsub("increased(.*)Cold Damage", "increased%1Physical Damage")},
+	["Increases and Reductions to other Damage Types in Radius are Transformed to apply to Fire Damage"] = {getSimpleConv({"PhysicalDamage","ColdDamage","LightningDamage","ChaosDamage"}, "FireDamage", "INC", true), getGsubMulti({"increased(.*)Physical Damage", "increased(.*)Cold Damage", "increased(.*)Lightning Damage", "increased(.*)Chaos Damage"}, "increased%1Fire Damage")},
+	["Passives granting Lightning Resistance or all Elemental Resistances in Radius also grant Chance to Block Spells at 35% of its value"] = {getSimpleConv({"LightningResist","ElementalResist"}, "SpellBlockChance", "BASE", false, 0.35), getDupRewrite("+(%d+)%% to [La].*Resistance", "+(%d+).*", "+%1%% chance to Block Spells", 0.35)},
+	["Passives granting Cold Resistance or all Elemental Resistances in Radius also grant Chance to Dodge Attacks at 35% of its value"] = {getSimpleConv({"ColdResist","ElementalResist"}, "AttackDodgeChance", "BASE", false, 0.35), getDupRewrite("+(%d+)%% to [Ca][ol].*Resistance", "+(%d+).*", "+%1%% chance to Dodge Attacks", 0.35)},
+	["Passives granting Fire Resistance or all Elemental Resistances in Radius also grant Chance to Block at 35% of its value"] = {getSimpleConv({"FireResist","ElementalResist"}, "BlockChance", "BASE", false, 0.35), getDupRewrite("+(%d+)%% to [Fa].*Resistance", "+(%d+).*", "+%1%% chance to Block", 0.35)},
+	["Melee and Melee Weapon Type modifiers in Radius are Transformed to Bow Modifiers"] = {function(node, out, data)
 		if node then
 			local mask1 = bor(ModFlag.Axe, ModFlag.Claw, ModFlag.Dagger, ModFlag.Mace, ModFlag.Staff, ModFlag.Sword, ModFlag.Melee)
 			local mask2 = bor(ModFlag.Weapon1H, ModFlag.WeaponMelee)
@@ -1791,21 +1900,149 @@ local jewelOtherFuncs = {
 			end
 		end
 	end,
-	["50% increased Effect of non-Keystone Passive Skills in Radius"] = function(node, out, data)
+	trChain(trChain(
+		getGsubMulti({"with Claws", "with Axes", "with Daggers", "with Maces", "with Staves", "with Swords", "with Two Handed Melee Weapons", "with One Handed Melee Weapons"}, "with Bows"),
+		getGsubMulti({"while wielding a Claw", "while wielding an Axe", "while wielding a Dagger", "while wielding a Mace", "while wielding a Staff", "while wielding a Sword", "while wielding a Two Handed Weapon", "while wielding a One Handed Weapon", "while wielding a Melee Weapon"}, "while wielding a Bow")
+	), getGsub("Melee (.*)Damage", "%1Damage with Bows"))},
+	["50% increased Effect of non-Keystone Passive Skills in Radius"] = {function(node, out, data)
 		if node and node.type ~= "Keystone" then
 			out:NewMod("PassiveSkillEffect", "INC", 50, data.modSource)
 		end
 	end,
-	["Notable Passive Skills in Radius grant nothing"] = function(node, out, data)
+	function(node, sd)
+		fn = getRewrite("(%d+)", "%1", 1.5)
+		if node and node.type ~= "Keystone" then
+			return fn(node, sd)
+		end
+		return sd
+	end},
+	["Keystones in Radius grant nothing"] = {function(node, out, data)
+		if node and node.type == "Keystone" then
+			out:NewMod("PassiveSkillHasNoEffect", "FLAG", true, data.modSource)
+		end
+	end,
+	function(node, sd)
+		if node and node.type == "Keystone" then
+			return {}
+		end
+		return sd
+	end},
+	["Notable Passive Skills in Radius grant nothing"] = {function(node, out, data)
 		if node and node.type == "Notable" then
 			out:NewMod("PassiveSkillHasNoEffect", "FLAG", true, data.modSource)
 		end
 	end,
-	["Allocated Small Passive Skills in Radius grant nothing"] = function(node, out, data)
+	function(node, sd)
+		if node and node.type == "Notable" then
+			return {}
+		end
+		return sd
+	end},
+	["Allocated Small Passive Skills in Radius grant nothing"] = {function(node, out, data)
 		if node and node.type == "Normal" then
 			out:NewMod("AllocatedPassiveSkillHasNoEffect", "FLAG", true, data.modSource)
 		end
 	end,
+	function(node, sd)
+		if node and node.type == "Normal" then
+			return {}
+		end
+		return sd
+	end},
+}
+
+local jewelOtherDynamicFuncs = {
+	["Passives in the radius are conquered by the (%w+)"] = {function(node, out, data, caps)
+		if node then
+			if node.type ~= "Keystone" then
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			end
+		end
+	end},
+	["Commanded leadership over (%d+) warriors under Kaom"] = {function(node, out, data, caps)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("StrengthInBlood", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			elseif node.type == "Normal" then
+				out:NewMod("Strength", "BASE", 2, data.modSource)
+			end
+			out:NewMod("KaruiSeed", "BASE", caps[1])
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Strength in Blood", "Recovery from Life Leech is not applied", "1% less Damage taken for every 2% Recovery per second from Life Leech"}
+			elseif node.type == "Normal" then
+				tr = copyTable(sd)
+				t_insert(tr, "+2 to Strength")
+				return tr
+			end
+		end
+		return sd
+	end},
+	["Commanded leadership over (%d+) warriors under Kiloava"] = {function(node, out, data, arg)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("GlancingBlows", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			elseif node.type == "Normal" then
+				out:NewMod("Strength", "BASE", 2, data.modSource)
+			end
+			out:NewMod("KaruiSeed", "BASE", arg)
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Glancing Blows", "Chance to Block Attack Damage is doubled", "Chance to Block Spell Damage is doubled", "You take 50% of Damage from Blocked Hits"}
+			elseif node.type == "Normal" then
+				tr = copyTable(sd)
+				t_insert(tr, "+2 to Strength")
+				return tr
+			elseif node.type == "Notable" then
+				tr = copyTable(sd)
+				t_insert(tr, "One of the following mods:")
+				t_insert(tr, "20% increased Physical Damage")
+				t_insert(tr, "20% increased Melee Damage")
+				t_insert(tr, "20% increased Fire Damage")
+				t_insert(tr, "5% increased Strength")
+				t_insert(tr, "4% increased Maximum Life")
+				t_insert(tr, "+20% to Fire Resistance")
+				t_insert(tr, "12% increased Totem Placement Speed")
+				t_insert(tr, "5% of Physical Damage from Hits Taken as Fire Damage")
+				t_insert(tr, "Gain 5% of Physical Damage as Extra Fire Damage")
+				t_insert(tr, "You take 10% reduced extra damage from Critical Strikes")
+				t_insert(tr, "15% increased Critical Strike Multiplier")
+				t_insert(tr, "30% increased Melee Critical Strike Chance")
+			end
+		end
+		return sd
+	end},
+	["Commanded leadership over (%d+) warriors under Rakiata"] = {function(node, out, data, arg)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("TemperedByWar", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			elseif node.type == "Normal" then
+				out:NewMod("Strength", "BASE", 2, data.modSource)
+			end
+			out:NewMod("KaruiSeed", "BASE", arg)
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Tempered By War", "50% of Cold and Lightning Damage taken as Fire Damage", "50% less Cold Resistance", "50% less Lightning Resistance"}
+			elseif node.type == "Normal" then
+				tr = copyTable(sd)
+				t_insert(tr, "+2 to Strength")
+				return tr
+			end
+		end
+		return sd
+	end},
 }
 
 -- Radius jewels that modify the jewel itself based on nearby allocated nodes
@@ -1926,7 +2163,7 @@ local jewelThresholdFuncs = {
 -- Unified list of jewel functions
 local jewelFuncList = { }
 for k, v in pairs(jewelOtherFuncs) do
-	jewelFuncList[k:lower()] = { func = v, type = "Other" }
+	jewelFuncList[k:lower()] = { func = v[1], trfunc = v[2], type = "Other" }
 end
 for k, v in pairs(jewelSelfFuncs) do
 	jewelFuncList[k:lower()] = { func = v, type = "Self" }
@@ -1936,6 +2173,11 @@ for k, v in pairs(jewelSelfUnallocFuncs) do
 end
 for k, v in pairs(jewelThresholdFuncs) do
 	jewelFuncList[k:lower()] = { func = v, type = "Threshold" }
+end
+
+local jewelDynFuncList = { }
+for k, v in pairs(jewelOtherDynamicFuncs) do
+	jewelDynFuncList[k:lower()] = { func = v[1], trfunc = v[2], type = "Other" }
 end
 
 -- Scan a line for the earliest and longest match from the pattern list
@@ -1971,6 +2213,16 @@ local function parseMod(line, order)
 	if jewelFunc then
 		return { mod("JewelFunc", "LIST", jewelFunc) }
 	end
+	local dynMod, dynLine, cap = scan(line, jewelDynFuncList)
+	if dynMod and #dynLine == 0 then
+		return { mod("JewelFunc", "LIST", {func = dynMod.func, trfunc = dynMod.trfunc, type = dynMod.type, caps = cap}) }
+	end
+	--for k, v in pairs(jewelDynFuncList) do
+	--	match = lineLower:match(k)
+	--	if match then
+	--		return { mod("JewelFunc", "LIST", {func = v.func, trfunc = v.trfunc, type = v.type, pattern = k}) }
+	--	end
+	--end
 	if unsupportedModList[lineLower] then
 		return { }, line
 	end
