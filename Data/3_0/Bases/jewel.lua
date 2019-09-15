@@ -24,7 +24,6 @@ itemBases["Prismatic Jewel"] = {
 }
 itemBases["Timeless Jewel"] = {
 	type = "Jewel",
-	hidden = true,
 	tags = { default = true, jewel = true, intjewel = true, dexjewel = true, strjewel = true, not_for_sale = true, },
 	req = { },
 }
