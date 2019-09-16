@@ -200,12 +200,13 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 	--local err, passives = PLoadModule("Data/"..treeVersion.."/Passives.lua")
 
 	ConPrintf("Processing tree...")
-	self.keystoneMap = { }
 
 	for id, node in pairs(AdditionalKeystoneNodes) do
 		self.nodes[id] = node
 	end
 
+	self.keystoneMap = { }
+	self.notableMap = { }
 	local nodeMap = { }
 	local sockets = { }
 	local orbitMult = { [0] = 0, m_pi / 3, m_pi / 6, m_pi / 6, m_pi / 20 }
@@ -236,6 +237,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 			ConPrintf("Added %s as a keystone.", node.dn)
 		elseif node["not"] then
 			node.type = "Notable"
+			self.notableMap[node.dn:lower()] = node
 		else
 			node.type = "Normal"
 		end

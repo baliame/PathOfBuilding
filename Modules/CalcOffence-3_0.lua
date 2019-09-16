@@ -233,18 +233,18 @@ function calcs.offence(env, actor, activeSkill)
 			skillModList:NewMod("Accuracy", "INC", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
 		end
 	end
-	if skillModList:Flag(nil, "LightRadiusAppliesToDamage") then
-		-- Light Radius conversion from Wreath of Phrecia
-		for i, value in ipairs(skillModList:Tabulate("INC", { }, "LightRadius")) do
-			local mod = value.mod
-			skillModList:NewMod("Damage", "INC", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
-		end
-	end
 	if skillModList:Flag(nil, "LightRadiusAppliesToAreaOfEffect") then
 		-- Light Radius conversion from Wreath of Phrecia
-		for i, value in ipairs(skillModList:Tabulate("INC", { }, "LightRadius")) do
+		for i, value in ipairs(skillModList:Tabulate("INC",  { }, "LightRadius")) do
 			local mod = value.mod
-			skillModList:NewMod("AreaOfEffect", "INC", mod.value * 0.5, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
+			skillModList:NewMod("AreaOfEffect", "INC", math.floor(mod.value / 2), mod.source, mod.flags, mod.keywordFlags, unpack(mod))
+		end
+	end
+	if skillModList:Flag(nil, "LightRadiusAppliesToDamage") then
+		-- Light Radius conversion from Wreath of Phrecia
+		for i, value in ipairs(skillModList:Tabulate("INC",  { }, "LightRadius")) do
+			local mod = value.mod
+			skillModList:NewMod("Damage", "INC", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))
 		end
 	end
 	if skillModList:Flag(nil, "CastSpeedAppliesToTrapThrowingSpeed") then
@@ -255,6 +255,15 @@ function calcs.offence(env, actor, activeSkill)
 				skillModList:NewMod("TrapThrowingSpeed", "INC", mod.value, mod.source, band(mod.flags, bnot(ModFlag.Cast), bnot(ModFlag.Attack)), mod.keywordFlags, unpack(mod))
 			end
 		end
+	end
+	if skillModList:Flag(nil, "TransfigurationOfBody") then
+		skillModList:NewMod("Damage", "INC", m_floor(skillModList:Sum("INC", nil, "Life") * 0.3), "Transfiguration of Body", ModFlag.Attack)
+	end
+	if skillModList:Flag(nil, "TransfigurationOfMind") then
+		skillModList:NewMod("Damage", "INC", m_floor(skillModList:Sum("INC", nil, "Mana") * 0.3), "Transfiguration of Mind")
+	end
+	if skillModList:Flag(nil, "TransfigurationOfSoul") then
+		skillModList:NewMod("Damage", "INC", m_floor(skillModList:Sum("INC", nil, "EnergyShield") * 0.3), "Transfiguration of Soul", ModFlag.Spell)
 	end
 
 	local isAttack = skillFlags.attack
@@ -284,7 +293,9 @@ function calcs.offence(env, actor, activeSkill)
 		if skillModList:Flag(nil, "FarShot") then
 			skillModList:NewMod("Damage", "MORE", 30, "Far Shot", bor(ModFlag.Attack, ModFlag.Projectile), { type = "DistanceRamp", ramp = {{35,0},{70,1}} })
 		end
-		output.ProjectileCount = skillModList:Sum("BASE", skillCfg, "ProjectileCount")
+		local projBase = skillModList:Sum("BASE", skillCfg, "ProjectileCount")
+		local projMore = skillModList:More(skillCfg, "ProjectileCount")
+		output.ProjectileCount = round((projBase - 1) * projMore + 1)
 		if skillModList:Flag(skillCfg, "CannotPierce") then
 			output.PierceCountString = "Cannot pierce"
 		else
@@ -397,7 +408,8 @@ function calcs.offence(env, actor, activeSkill)
 			breakdown.TrapTriggerRadius = breakdown.area(10, areaMod, output.TrapTriggerRadius)
 		end
 	elseif skillData.cooldown then
-		output.Cooldown = skillData.cooldown / calcLib.mod(skillModList, skillCfg, "CooldownRecovery")
+		local cooldownOverride = skillModList:Override(skillCfg, "CooldownRecovery")
+		output.Cooldown = cooldownOverride or skillData.cooldown / calcLib.mod(skillModList, skillCfg, "CooldownRecovery")
 		if breakdown then
 			breakdown.Cooldown = {
 				s_format("%.2fs ^8(base)", skillData.cooldown),
@@ -901,6 +913,10 @@ function calcs.offence(env, actor, activeSkill)
 				output.CritMultiplier = 1
 			else
 				local extraDamage = skillModList:Sum("BASE", cfg, "CritMultiplier") / 100
+				local multiOverride = skillModList:Override(skillCfg, "CritMultiplier")
+				if multiOverride then
+					extraDamage = (multiOverride - 100) / 100
+				end
 				if env.mode_effective then
 					local enemyInc = 1 + enemyDB:Sum("INC", nil, "SelfCritMultiplier") / 100
 					extraDamage = round(extraDamage * enemyInc, 2)

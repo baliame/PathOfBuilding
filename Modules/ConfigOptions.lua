@@ -90,8 +90,11 @@ return {
 		modList:NewMod("Condition:EnemyHasDeathmark", "FLAG", true, "Config")
 	end },
 	{ label = "Feeding Frenzy:", ifSkill = "Feeding Frenzy" },
-	{ var = "feedingFrenzyFeedingFrenzyActive", type = "check", label = "Is Feeding Frenzy active?", ifSkill = "Feeding Frenzy", apply = function(val, modList, enemyModList)
+	{ var = "feedingFrenzyFeedingFrenzyActive", type = "check", label = "Is Feeding Frenzy active?", ifSkill = "Feeding Frenzy", tooltip = "Feeding Frenzy grants:\n10% more Minion Damage\n15% increased Minion Movement Speed\n15% increased Minion Attack and Cast Speed", apply = function(val, modList, enemyModList)
 		modList:NewMod("Condition:FeedingFrenzyActive", "FLAG", true, "Config")
+		modList:NewMod("MinionModifier", "LIST", { mod = modLib.createMod("Damage", "MORE", 10, "Feeding Frenzy") }, "Config")
+		modList:NewMod("MinionModifier", "LIST", { mod = modLib.createMod("MovementSpeed", "INC", 15, "Feeding Frenzy") }, "Config")
+		modList:NewMod("MinionModifier", "LIST", { mod = modLib.createMod("Speed", "INC", 15, "Feeding Frenzy") }, "Config")
 	end },
 	{ label = "Herald of Agony:", ifSkill = "Herald of Agony" },
 	{ var = "heraldOfAgonyVirulenceStack", type = "count", label = "# of Virulence Stacks:", ifSkill = "Herald of Agony", apply = function(val, modList, enemyModList)
@@ -420,6 +423,9 @@ return {
 	{ var = "multiplierNearbyAlly", type = "count", label = "# of Nearby Allies", ifMult = "NearbyAlly", apply = function(val, modList, enemyModList)
 		modList:NewMod("Multiplier:NearbyAlly", "BASE", val, "Config", { type = "Condition", var = "Combat" })
 	end },
+	{ var = "multiplierNearbyEnemy", type = "count", label = "# of Nearby Enemies", ifMult = "NearbyEnemy", apply = function(val, modList, enemyModList)
+		modList:NewMod("Multiplier:NearbyEnemy", "BASE", val, "Config", { type = "Condition", var = "Combat" })
+  end },
 	{ var = "multiplierNearbyCorpse", type = "count", label = "# of Nearby Corpses", ifMult = "NearbyCorpse", apply = function(val, modList, enemyModList)
 		modList:NewMod("Multiplier:NearbyCorpse", "BASE", val, "Config", { type = "Condition", var = "Combat" })
 	end },
