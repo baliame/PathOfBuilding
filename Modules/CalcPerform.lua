@@ -42,6 +42,20 @@ local function mergeBuff(src, destTable, destKey)
 	end
 end
 
+function dumpkeys(o)
+    for k,v in pairs(o) do
+    	if type(k) ~= 'table' then
+    		if type(k) == 'number' then
+    			ConPrintf("%d", k)
+    		else
+    			ConPrintf(k)
+    		end
+    	else
+       		ConPrintf("[table]")
+       	end
+    end
+end
+
 -- Merge keystone modifiers
 local function mergeKeystones(env)
 	local modDB = env.modDB

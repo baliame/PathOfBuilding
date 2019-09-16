@@ -1579,9 +1579,9 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 					if craft.master then
 						label = craft.master .. " " .. craft.masterLevel .. "   "..craft.type:sub(1,3).."^8[" .. table.concat(craft, "/") .. "]"
 					else
-						local unlock = "Recipe"
-						if craft.affix == "Chosen" or craft.affix == "of the Order" then
-							unlock = "Veiled"
+						local unlock = "Veiled"
+						if craft.affix == "Upgraded" or craft.affix == "of Craft" then
+							unlock = "Recipe"
 						end
 						label = craft.type:sub(1,3) .. " ^8[" .. unlock .. "] ^2" .. table.concat(craft, "/")
 					end

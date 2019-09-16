@@ -31,6 +31,40 @@ local function getFile(URL)
 	return #page > 0 and page
 end
 
+-- Hack: Legion and blight keystones
+local AdditionalKeystoneNodes={
+	[9999991]={["id"]=9999991,["dn"]="Divine Flesh",["g"]=1,["in"]={[0]=9999991},["sd"]={"All Damage taken bypasses Energy Shield\n50% of Elemental Damage taken as Chaos Damage\n+10% to maximum Chaos Resistance"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999992]={["id"]=9999992,["dn"]="Eternal Youth",["g"]=1,["in"]={[0]=9999992},["sd"]={"50% less Life Regeneration Rate\n50% less maximum Total Recovery per Second from Life Leech\nEnergy Shield Recharge instead applies to Life"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999993]={["id"]=9999993,["dn"]="Corrupted Soul",["g"]=1, ["in"]={[0]=9999993},["sd"]={"50% of Non-Chaos Damage taken bypasses Energy Shield\nGain 20% of Maximum Life as Extra Maximum Energy Shield"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999994]={["id"]=9999994,["dn"]="Strength Of Blood",["g"]=1, ["in"]={[0]=9999994},["sd"]={"Recovery from Life Leech is not applied\n1% less Damage taken for every 2% Recovery per second from Life Leech"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999995]={["id"]=9999995,["dn"]="Tempered By War",["g"]=1, ["in"]={[0]=9999995},["sd"]={"50% of Cold and Lightning Damage taken as Fire Damage\n50% less Cold Resistance\n50% less Lightning Resistance"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999996]={["id"]=9999996,["dn"]="Glancing Blows",["g"]=1, ["in"]={[0]=9999996},["sd"]={"Chance to Block Attack Damage is doubled\nChance to Block Spell Damage is doubled\nYou take 50% of Damage from Blocked Hits"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999997]={["id"]=9999997,["dn"]="Wind Dancer",["g"]=1, ["in"]={[0]=9999997},["sd"]={"20% less Damage taken if you haven't been Hit Recently\n40% less Evasion Rating if you haven't been Hit Recently\n20% more Evasion Rating if you've been Hit Recently"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999998]={["id"]=9999998,["dn"]="Dance With Death",["g"]=1, ["in"]={[0]=9999998},["sd"]={"Can't use Helmets\nYour Critical Strike Chance is Lucky\nYour Damage with Critical Strikes is Lucky\nEnemies' Damage with Critical Strikes against you is Lucky"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999999]={["id"]=9999999,["dn"]="Second Sight",["g"]=1, ["in"]={[0]=9999999},["sd"]={"You are Blind\nBlind does not affect your Light Radius\n25% more Melee Critical Strike Chance while Blinded"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999981]={["id"]=9999981,["dn"]="The Agnostic",["g"]=1, ["in"]={[0]=9999981},["sd"]={"Maximum Energy Shield is 0\nWhile not on Full Life, Sacrifice 20% of Mana per Second to Recover that much Life"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999982]={["id"]=9999982,["dn"]="Inner Conviction",["g"]=1, ["in"]={[0]=9999982},["sd"]={"3% more Spell Damage per Power Charge\nGain Power Charges instead of Frenzy Charges"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999983]={["id"]=9999983,["dn"]="Power of Purpose",["g"]=1, ["in"]={[0]=9999983},["sd"]={"80% of Maximum Mana is Converted to twice that much Armour"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999984]={["id"]=9999984,["dn"]="Supreme Decadence",["g"]=1, ["in"]={[0]=9999984},["sd"]={"Life Recovery from Flasks also applies to Energy Shield\n30% less Life Recovery from Flasks"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999985]={["id"]=9999985,["dn"]="Supreme Grandstanding",["g"]=1, ["in"]={[0]=9999985},["sd"]={"Nearby Allies and Enemies Share Charges with you\nEnemies Hitting you have 10% chance to gain an Endurance, Frenzy or Power Charge"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+	[9999986]={["id"]=9999986,["dn"]="Supreme Ego",["g"]=1, ["in"]={[0]=9999986},["sd"]={"You can only have one Aura on you from your Skills\nYour Aura Skills do not affect Allies\n50% more Effect of Auras from your Skills on you\n50% more Mana Reserved"},
+		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
+}
+
 local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 	self.treeVersion = treeVersion
 	self.targetVersion = treeVersions[treeVersion].targetVersion
@@ -108,8 +142,8 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 				handle = sheet.handle,
 				width = coords.w,
 				height = coords.h,
-				[1] = coords.x / sheet.width, 
-				[2] = coords.y / sheet.height, 
+				[1] = coords.x / sheet.width,
+				[2] = coords.y / sheet.height,
 				[3] = (coords.x + coords.w) / sheet.width,
 				[4] = (coords.y + coords.h) / sheet.height
 			}
@@ -144,14 +178,14 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 			pathAscend = "PassiveSkillScreenAscendancyFrameLargeCanAllocate",
 			unallocAscend = "PassiveSkillScreenAscendancyFrameLargeNormal"
 		},
-		Keystone = { 
+		Keystone = {
 			artWidth = 84,
 			alloc = "KeystoneFrameAllocated",
 			path = "KeystoneFrameCanAllocate",
 			unalloc = "KeystoneFrameUnallocated"
 		},
 		Socket = {
-			artWidth = 58, 
+			artWidth = 58,
 			alloc = "JewelFrameAllocated",
 			path = "JewelFrameCanAllocate",
 			unalloc = "JewelFrameUnallocated"
@@ -167,6 +201,11 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 
 	ConPrintf("Processing tree...")
 	self.keystoneMap = { }
+
+	for id, node in pairs(AdditionalKeystoneNodes) do
+		self.nodes[id] = node
+	end
+
 	local nodeMap = { }
 	local sockets = { }
 	local orbitMult = { [0] = 0, m_pi / 3, m_pi / 6, m_pi / 6, m_pi / 20 }
@@ -194,6 +233,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 		elseif node.ks then
 			node.type = "Keystone"
 			self.keystoneMap[node.dn] = node
+			ConPrintf("Added %s as a keystone.", node.dn)
 		elseif node["not"] then
 			node.type = "Notable"
 		else
@@ -248,7 +288,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 				end
 			end
 			local line = node.sd[i]
-			local list, extra = modLib.parseMod[self.targetVersion](line)
+			local list, extra = modLib.parseMod[self.targetVersion](line, false, true)
 			if not list or extra then
 				-- Try to combine it with one or more of the lines that follow this one
 				local endI = i + 1
@@ -316,7 +356,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 			for _, node in pairs(self.nodes) do
 				if node ~= socket then
 					local vX, vY = node.x - socket.x, node.y - socket.y
-					if vX * vX + vY * vY <= rSq then 
+					if vX * vX + vY * vY <= rSq then
 						socket.nodesInRadius[radiusIndex][node.id] = node
 					end
 				end
@@ -383,7 +423,7 @@ function PassiveTreeClass:BuildConnector(node1, node2)
 		nodeId2 = node2.id,
 		c = { } -- This array will contain the quad's data: 1-8 are the vertex coordinates, 9-16 are the texture coordinates
 				-- Only the texture coords are filled in at this time; the vertex coords need to be converted from tree-space to screen-space first
-				-- This will occur when the tree is being drawn; .vert will map line state (Normal/Intermediate/Active) to the correct tree-space coordinates 
+				-- This will occur when the tree is being drawn; .vert will map line state (Normal/Intermediate/Active) to the correct tree-space coordinates
 	}
 	if node1.g == node2.g and node1.o == node2.o then
 		-- Nodes are in the same orbit of the same group

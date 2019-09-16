@@ -1655,6 +1655,21 @@ local keystoneList = {
 	"Phase Acrobatics",
 	"Point Blank",
 	"Resolute Technique",
+	"Divine Flesh",
+	"Eternal Youth",
+	"Corrupted Soul",
+	"Strength Of Blood",
+	"Tempered By War",
+	"Glancing Blows",
+	"Wind Dancer",
+	"Dance With Death",
+	"Second Sight",
+	"The Agnostic",
+	"Inner Conviction",
+	"Power of Purpose",
+	"Supreme Decadence",
+	"Supreme Grandstanding",
+	"Supreme Ego",
 	"Unwavering Stance",
 	"Vaal Pact",
 	"Zealot's Oath",
@@ -2257,9 +2272,12 @@ local function scan(line, patternList, plain)
 	end
 end
 
-local function parseMod(line, order)
+local function parseMod(line, order, debug)
 	-- Check if this is a special modifier
 	local lineLower = line:lower()
+	if debug then
+		ConPrintf("PARSEMOD> %s", line)
+	end
 	local jewelFunc = jewelFuncList[lineLower]
 	if jewelFunc then
 		return { mod("JewelFunc", "LIST", jewelFunc) }
