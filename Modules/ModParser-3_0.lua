@@ -2319,17 +2319,15 @@ end
 local function parseMod(line, order, debug)
 	-- Check if this is a special modifier
 	local lineLower = line:lower()
-<<<<<<< HEAD
 	if debug then
 		ConPrintf("PARSEMOD> %s", line)
-=======
+	end
 	local bestVal, _, bestCaps = scan(line, jewelFuncList)
 	for pattern, patternVal in pairs(jewelFuncList) do
 		local _, _, cap1, cap2, cap3, cap4, cap5 = lineLower:find(pattern, 1)
 		if cap1 then
 			return {mod("JewelFunc", "LIST", {func = patternVal.func(cap1, cap2, cap3, cap4, cap5), type = patternVal.type}) }
 		end
->>>>>>> 53e752b54d52bc76d583abc0964915e85eda9bf2
 	end
 	local jewelFunc = jewelFuncList[lineLower]
 	if jewelFunc then

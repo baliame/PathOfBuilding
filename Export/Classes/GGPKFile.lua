@@ -12,6 +12,7 @@ local GGPKClass = newClass("GGPKFile", function(self, path)
 
 	self.ggpk = { }
 	self:ReadRecord(self.ggpk)
+	ConPrintf("Record count %d", self.ggpk.numRecord)
 	for i = 1, self.ggpk.numRecord do
 		self:ReadRecord(self.ggpk.recordList[i])
 	end
@@ -46,7 +47,7 @@ function GGPKClass:ReadRecord(record)
 				offset = bytesToULong(raw, (i-1) * 8 + 1),
 			}
 		end
---		ConPrintf("GGPK: %d records", record.numRecord)
+		ConPrintf("GGPK: %d records", record.numRecord)
 	elseif record.tag == "PDIR" then
 		raw = self.file:read(40)
 		local nameLength = bytesToUInt(raw, 1)
@@ -61,7 +62,7 @@ function GGPKClass:ReadRecord(record)
 				offset = bytesToULong(raw, nameLength * 2 + (i-1) * 12 + 5),
 			}
 		end
---		ConPrintf("PDIR '%s': %d records", record.name, record.numRecord)
+		ConPrintf("PDIR '%s': %d records", record.name, record.numRecord)
 	elseif record.tag == "FILE" then
 		raw = self.file:read(36)
 		local nameLength = bytesToUInt(raw, 1)
@@ -70,10 +71,10 @@ function GGPKClass:ReadRecord(record)
 		local headLength = 44 + nameLength * 2
 		record.dataOffset = record.offset + headLength
 		record.dataLength = record.length - headLength
---		ConPrintf("FILE '%s': %d bytes", record.name, record.dataLength)
+		ConPrintf("FILE '%s': %d bytes", record.name, record.dataLength)
 	elseif record.tag == "FREE" then
 		record.nextFree = bytesToULong(self.file:read(8))
---		ConPrintf("FREE")
+		ConPrintf("FREE")
 	end
 	record.read = true
 end
@@ -94,7 +95,7 @@ function GGPKClass:GetRecord(name)
 			end
 		end
 		if not found then
-			return 
+			return
 		end
 		record = found
 	end

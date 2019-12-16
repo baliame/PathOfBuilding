@@ -768,6 +768,97 @@ skills["BlastRain"] = {
 		[40] = { 100, 0, 4, 80, 32, damageEffectiveness = 0.54, baseMultiplier = 0.536, levelRequirement = 100, manaCost = 13, statInterpolation = { 1, 1, 1, 1, 1, }, },
 	},
 }
+skills["ArtilleryBallista"] = {
+	name = "Artillery Ballista",
+	color = 2,
+	description = "Summons a ballista totem that propels a sequence of fiery arrows into the air. The arrows impact the ground in a line, each dealing area damage to enemies around it.",
+	skillTypes = { [SkillType.Attack] = true, [SkillType.Area] = true, [SkillType.ProjectileDamage] = true, [SkillType.SkillCanTrap] = true, [SkillType.SkillCanMine] = true, [SkillType.FireSkill] = true, [SkillType.ProjectileAttack] = true, [SkillType.Totem] = true},
+	weaponTypes = {
+		["Bow"] = true,
+	},
+	statDescriptionScope = "skill_stat_descriptions",
+	castTime = 1,
+	parts = {
+		{
+			name = "1 explosion",
+		},
+		{
+			name = "1 explosion, 3 ballistas",
+		},
+		{
+			name = "6 explosions",
+		},
+		{
+			name = "6 explosions, 3 ballistas",
+		},
+	},
+	baseFlags = {
+		attack = true,
+		projectile = true,
+		area = true,
+		totem = true,
+		duration = true,
+	},
+	baseMods = {
+		skill("radius", 24),
+		skill("dpsMultiplier", 3, { type = "SkillPart", skillPart = 2 }),
+		skill("dpsMultiplier", 6, { type = "SkillPart", skillPart = 3 }),
+		skill("dpsMultiplier", 18, { type = "SkillPart", skillPart = 4 }),
+	},
+	qualityStats = {
+		{ "base_skill_area_of_effect_+%", 0.5 },
+	},
+	stats = {
+		"skill_physical_damage_%_to_convert_to_fire",
+		"base_skill_area_of_effect_+%",
+		"blast_rain_number_of_blasts",
+		"blast_rain_arrow_delay_ms",
+		"base_is_projectile",
+		"is_area_damage",
+	},
+	levels = {
+		[1] = { 100, 0, 6, 80, damageEffectiveness = 0.36, baseMultiplier = 0.36, levelRequirement = 28, manaCost = 7, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[2] = { 100, 0, 6, 80, damageEffectiveness = 0.36, baseMultiplier = 0.363, levelRequirement = 31, manaCost = 7, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[3] = { 100, 0, 6, 80, damageEffectiveness = 0.37, baseMultiplier = 0.366, levelRequirement = 34, manaCost = 7, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[4] = { 100, 0, 6, 80, damageEffectiveness = 0.37, baseMultiplier = 0.369, levelRequirement = 37, manaCost = 7, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[5] = { 100, 0, 6, 80, damageEffectiveness = 0.37, baseMultiplier = 0.372, levelRequirement = 40, manaCost = 8, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[6] = { 100, 0, 6, 80, damageEffectiveness = 0.38, baseMultiplier = 0.375, levelRequirement = 42, manaCost = 8, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[7] = { 100, 0, 6, 80, damageEffectiveness = 0.38, baseMultiplier = 0.378, levelRequirement = 44, manaCost = 8, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[8] = { 100, 0, 6, 80, damageEffectiveness = 0.38, baseMultiplier = 0.381, levelRequirement = 46, manaCost = 8, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[9] = { 100, 0, 6, 80, damageEffectiveness = 0.38, baseMultiplier = 0.384, levelRequirement = 48, manaCost = 8, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[10] = { 100, 0, 6, 80, damageEffectiveness = 0.39, baseMultiplier = 0.387, levelRequirement = 50, manaCost = 9, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[11] = { 100, 0, 6, 80, damageEffectiveness = 0.39, baseMultiplier = 0.39, levelRequirement = 52, manaCost = 9, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[12] = { 100, 0, 6, 80, damageEffectiveness = 0.39, baseMultiplier = 0.393, levelRequirement = 54, manaCost = 9, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[13] = { 100, 0, 6, 80, damageEffectiveness = 0.4, baseMultiplier = 0.396, levelRequirement = 56, manaCost = 9, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[14] = { 100, 0, 6, 80, damageEffectiveness = 0.4, baseMultiplier = 0.399, levelRequirement = 58, manaCost = 9, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[15] = { 100, 0, 6, 80, damageEffectiveness = 0.4, baseMultiplier = 0.402, levelRequirement = 60, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[16] = { 100, 0, 6, 80, damageEffectiveness = 0.41, baseMultiplier = 0.405, levelRequirement = 62, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[17] = { 100, 0, 6, 80, damageEffectiveness = 0.41, baseMultiplier = 0.408, levelRequirement = 64, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[18] = { 100, 0, 6, 80, damageEffectiveness = 0.41, baseMultiplier = 0.411, levelRequirement = 66, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[19] = { 100, 0, 6, 80, damageEffectiveness = 0.41, baseMultiplier = 0.414, levelRequirement = 68, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[20] = { 100, 0, 6, 80, damageEffectiveness = 0.42, baseMultiplier = 0.417, levelRequirement = 70, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[21] = { 100, 0, 6, 80, damageEffectiveness = 0.42, baseMultiplier = 0.42, levelRequirement = 72, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[22] = { 100, 0, 6, 80, damageEffectiveness = 0.42, baseMultiplier = 0.423, levelRequirement = 74, manaCost = 10, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[23] = { 100, 0, 6, 80, damageEffectiveness = 0.43, baseMultiplier = 0.426, levelRequirement = 76, manaCost = 11, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[24] = { 100, 0, 6, 80, damageEffectiveness = 0.43, baseMultiplier = 0.429, levelRequirement = 78, manaCost = 11, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[25] = { 100, 0, 6, 80, damageEffectiveness = 0.43, baseMultiplier = 0.432, levelRequirement = 80, manaCost = 11, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[26] = { 100, 0, 6, 80, damageEffectiveness = 0.44, baseMultiplier = 0.435, levelRequirement = 82, manaCost = 11, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[27] = { 100, 0, 6, 80, damageEffectiveness = 0.44, baseMultiplier = 0.438, levelRequirement = 84, manaCost = 11, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[28] = { 100, 0, 6, 80, damageEffectiveness = 0.44, baseMultiplier = 0.441, levelRequirement = 86, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[29] = { 100, 0, 6, 80, damageEffectiveness = 0.44, baseMultiplier = 0.444, levelRequirement = 88, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[30] = { 100, 0, 6, 80, damageEffectiveness = 0.45, baseMultiplier = 0.447, levelRequirement = 90, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[31] = { 100, 0, 6, 80, damageEffectiveness = 0.45, baseMultiplier = 0.45, levelRequirement = 91, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[32] = { 100, 0, 6, 80, damageEffectiveness = 0.45, baseMultiplier = 0.453, levelRequirement = 92, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[33] = { 100, 0, 6, 80, damageEffectiveness = 0.46, baseMultiplier = 0.456, levelRequirement = 93, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[34] = { 100, 0, 6, 80, damageEffectiveness = 0.46, baseMultiplier = 0.459, levelRequirement = 94, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[35] = { 100, 0, 6, 80, damageEffectiveness = 0.46, baseMultiplier = 0.462, levelRequirement = 95, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[36] = { 100, 0, 6, 80, damageEffectiveness = 0.47, baseMultiplier = 0.465, levelRequirement = 96, manaCost = 12, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[37] = { 100, 0, 6, 80, damageEffectiveness = 0.47, baseMultiplier = 0.468, levelRequirement = 97, manaCost = 13, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[38] = { 100, 0, 6, 80, damageEffectiveness = 0.47, baseMultiplier = 0.471, levelRequirement = 98, manaCost = 13, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[39] = { 100, 0, 6, 80, damageEffectiveness = 0.47, baseMultiplier = 0.474, levelRequirement = 99, manaCost = 13, statInterpolation = { 1, 1, 1, 1, 1, }, },
+		[40] = { 100, 0, 6, 80, damageEffectiveness = 0.48, baseMultiplier = 0.477, levelRequirement = 100, manaCost = 13, statInterpolation = { 1, 1, 1, 1, 1, }, },
+	},
+}
 skills["BlinkArrow"] = {
 	name = "Blink Arrow",
 	color = 2,
@@ -5131,7 +5222,7 @@ skills["Reave"] = {
 		{
 			name = "4 stages",
 		},
-		{ 
+		{
 			name = "8 stages",
 		},
 	},
@@ -5222,7 +5313,7 @@ skills["VaalReave"] = {
 		{
 			name = "4 Stages",
 		},
-		{ 
+		{
 			name = "8 Stages",
 		},
 	},
@@ -5400,7 +5491,7 @@ skills["ScourgeArrow"] = {
 		{
 			name = "Release at 5 Stages",
 		},
-		{ 
+		{
 			name = "Thorn Arrows"
 		},
 	},
