@@ -181,6 +181,14 @@ for _, targetVersion in ipairs(targetVersionList) do
 	}
 	verData.masterMods = dataModule("ModMaster")
 	verData.fossilMods = dataModule("ModFossil")
+	-- verData.crusaderMods = targetVersion ~= "2_6" and dataModule("ModCrusader") or { }
+	-- verData.hunterMods = targetVersion ~= "2_6" and dataModule("ModHunter") or { }
+	-- verData.redeemerMods = targetVersion ~= "2_6" and dataModule("ModRedeemer") or { }
+	-- verData.warlordMods = targetVersion ~= "2_6" and dataModule("ModWarlord") or { }
+	verData.crusaderMods = dataModule("ModCrusader")
+	verData.hunterMods = dataModule("ModHunter")
+	verData.redeemerMods = dataModule("ModRedeemer")
+	verData.warlordMods = dataModule("ModWarlord")
 	verData.enchantments = {
 		Helmet = dataModule("EnchantmentHelmet"),
 		Boots = dataModule("EnchantmentBoots"),

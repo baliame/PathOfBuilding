@@ -1580,7 +1580,17 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 						label = craft.master .. " " .. craft.masterLevel .. "   "..craft.type:sub(1,3).."^8[" .. table.concat(craft, "/") .. "]"
 					else
 						local unlock = "Veiled"
-						if craft.affix == "Upgraded" or craft.affix == "of Craft" then
+						if craft.affix == "of Prefixes" then
+							unlock = "Eber"
+						elseif craft.affix == "Suffixed" then
+							unlock = "Yriel"
+						elseif craft.affix == "of Spellcraft" then
+							unlock = "Inya"
+						elseif craft.affix == "of Weaponcraft" then
+							unlock = "Volkuur"
+						elseif craft.affix == "of Crafting" then
+							unlock = "Pale Court"
+						elseif craft.affix == "Upgraded" or craft.affix == "of Craft" then
 							unlock = "Recipe"
 						end
 						label = craft.type:sub(1,3) .. " ^8[" .. unlock .. "] ^2" .. table.concat(craft, "/")
@@ -1593,22 +1603,94 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 					})
 				end
 			end
-		elseif sourceId == "FOSSIL" then
-			for _, mod in ipairs(self.build.data.fossilMods) do
-				for _, tag in ipairs(mod.types) do
-					applies = false
+		elseif sourceId == "CRUSADER" then
+			for _, craft in ipairs(self.build.data.crusaderMods) do
+				applies = false
+				for _, tag in ipairs(craft.types) do
 					if self.displayItem.base.tags[tag] then
 						applies = true
 					end
-					if applies then
-						t_insert(modList, {
-							label = mod.type:sub(1,3) .. " ^8[" .. mod.fossil:match("(%w+)") .. "] ^2" .. table.concat(mod, "/"),
-							mod = mod,
-							type = "custom",
-							fossil = mod.fossil,
-							affix = mod.type:lower(),
-						})
+				end
+				if applies then
+					local label = craft.type:sub(1,3) .. "^8[ilvl" .. craft.level .."] ^2" .. table.concat(craft, "/")
+					t_insert(modList, {
+						label = label,
+						mod = craft,
+						type = "custom",
+						affix = craft.type:lower(),
+					})
+				end
+			end
+		elseif sourceId == "WARLORD" then
+			for _, craft in ipairs(self.build.data.warlordMods) do
+				applies = false
+				for _, tag in ipairs(craft.types) do
+					if self.displayItem.base.tags[tag] then
+						applies = true
 					end
+				end
+				if applies then
+					local label = craft.type:sub(1,3) .. "^8[ilvl" .. craft.level .."] ^2" .. table.concat(craft, "/")
+					t_insert(modList, {
+						label = label,
+						mod = craft,
+						type = "custom",
+						affix = craft.type:lower(),
+					})
+				end
+			end
+		elseif sourceId == "HUNTER" then
+			for _, craft in ipairs(self.build.data.hunterMods) do
+				applies = false
+				for _, tag in ipairs(craft.types) do
+					if self.displayItem.base.tags[tag] then
+						applies = true
+					end
+				end
+				if applies then
+					local label = craft.type:sub(1,3) .. "^8[ilvl" .. craft.level .."] ^2" .. table.concat(craft, "/")
+					t_insert(modList, {
+						label = label,
+						mod = craft,
+						type = "custom",
+						affix = craft.type:lower(),
+					})
+				end
+			end
+		elseif sourceId == "REDEEMER" then
+			for _, craft in ipairs(self.build.data.redeemerMods) do
+				applies = false
+				for _, tag in ipairs(craft.types) do
+					if self.displayItem.base.tags[tag] then
+						applies = true
+					end
+				end
+				if applies then
+					local label = craft.type:sub(1,3) .. "^8[ilvl" .. craft.level .."] ^2" .. table.concat(craft, "/")
+					t_insert(modList, {
+						label = label,
+						mod = craft,
+						type = "custom",
+						affix = craft.type:lower(),
+					})
+				end
+			end
+		elseif sourceId == "FOSSIL" then
+			for _, mod in ipairs(self.build.data.fossilMods) do
+				applies = false
+				for _, tag in ipairs(mod.types) do
+					if self.displayItem.base.tags[tag] then
+						applies = true
+					end
+				end
+				if applies then
+					t_insert(modList, {
+						label = mod.type:sub(1,3) .. " ^8[" .. mod.fossil:match("(%w+)") .. "] ^2" .. table.concat(mod, "/"),
+						mod = mod,
+						type = "custom",
+						fossil = mod.fossil,
+						affix = mod.type:lower(),
+					})
 				end
 			end
 		elseif sourceId == "ESSENCE" then
@@ -1659,6 +1741,12 @@ function ItemsTabClass:AddCustomModifierToDisplayItem()
 	end
 	if (self.build.targetVersion ~= "2_6" and self.displayItem.base.subType ~= "Abyss") or (self.displayItem.type ~= "Jewel" and self.displayItem.type ~= "Flask") then
 		t_insert(sourceList, { label = "Crafting Bench", sourceId = "MASTER" })
+	end
+	if (self.build.targetVersion ~= "2_6" and self.displayItem.type ~= "Jewel") then
+		t_insert(sourceList, { label = "Crusader", sourceId = "CRUSADER" })
+		t_insert(sourceList, { label = "Warlord", sourceId = "WARLORD" })
+		t_insert(sourceList, { label = "Hunter", sourceId = "HUNTER" })
+		t_insert(sourceList, { label = "Redeemer", sourceId = "REDEEMER" })
 	end
 	if self.displayItem.type ~= "Jewel" and self.displayItem.type ~= "Flask" then
 		t_insert(sourceList, { label = "Essence", sourceId = "ESSENCE" })

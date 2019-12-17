@@ -2303,29 +2303,8 @@ return {
 			list=false,
 			name="",
 			refTo="",
-			type="Key",
-			width=50
-		},
-		[22]={
-			list=false,
-			name="",
-			refTo="",
 			type="Bool",
 			width=50
-		},
-		[23]={
-			list=true,
-			name="RequireUsableWith",
-			refTo="ItemClasses",
-			type="Key",
-			width=150
-		},
-		[24]={
-			list=false,
-			name="PlusVersionOf",
-			refTo="GrantedEffects",
-			type="Key",
-			width=150
 		}
 	},
 	GrantedEffectsPerLevel={
@@ -2756,27 +2735,6 @@ return {
 	ItemCreationTemplateCustomAction={
 	},
 	ItemExperiencePerLevel={
-		[1]={
-			list=false,
-			name="BaseItemType",
-			refTo="BaseItemTypes",
-			type="Key",
-			width=410
-		},
-		[2]={
-			list=false,
-			name="Level",
-			refTo="",
-			type="Int",
-			width=50
-		},
-		[3]={
-			list=false,
-			name="Experience",
-			refTo="",
-			type="Int",
-			width=150
-		}
 	},
 	ItemSetNames={
 	},
@@ -3067,7 +3025,7 @@ return {
 			name="Id",
 			refTo="",
 			type="String",
-			width=300
+			width=390
 		},
 		[2]={
 			list=false,
@@ -3647,14 +3605,14 @@ return {
 			width=110
 		},
 		[7]={
-			list=true,
+			list=false,
 			name="Actor",
 			refTo="",
 			type="String",
 			width=150
 		},
 		[8]={
-			list=true,
+			list=false,
 			name="AnimatedObject",
 			refTo="",
 			type="String",
@@ -4828,20 +4786,6 @@ return {
 	WeaponArmourCommon={
 	},
 	WeaponClasses={
-		[1]={
-			list=false,
-			name="ItemClass",
-			refTo="ItemClasses",
-			type="Key",
-			width=150
-		},
-		[2]={
-			list=false,
-			name="MaxRange",
-			refTo="",
-			type="Int",
-			width=150
-		}
 	},
 	WeaponDamageScaling={
 	},
