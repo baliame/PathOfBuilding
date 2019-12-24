@@ -8,6 +8,7 @@ Ruby Ring
 League: Delve
 Source: Drops from unique{Aul, the Crystal King}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Fire Resistance
 +20 to Strength
 5% increased maximum Energy Shield
@@ -18,6 +19,7 @@ Ruby Ring
 League: Delve
 Source: Drops from unique{Ahuatotli, the Blind}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Fire Resistance
 +20 to Strength
 5% increased maximum Energy Shield
@@ -28,6 +30,7 @@ Ruby Ring
 League: Delve
 Source: Drops from unique{Kurgal, the Blackblooded}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Fire Resistance
 +20 to Strength
 5% increased maximum Energy Shield
@@ -36,10 +39,23 @@ Requires Level 49
 Andvarius
 Gold Ring
 Requires Level 20
+Implicits: 1
 (6-15)% increased Rarity of Items found
 +10 to Dexterity
 (50-70)% increased Rarity of Items found
 −20% to all Elemental Resistances
+]],[[
+Astral Projector
+Topaz Ring
+League: Metamorph
+Requires Level 40
+Implicits: 1
++(20-30)% to Lightning Resistance
++(30-50) to Intelligence
+(20-25)% increased Spell Damage
+30% chance to Avoid Elemental Ailments
+Nova Spells have 20% less Area of Effect
+Nova Spells Cast at the targeted location instead of around you
 ]],[[
 Berek's Grip
 Two-Stone Ring
@@ -48,6 +64,7 @@ Variant: Pre 2.6.0
 Variant: Pre 3.8.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(12-16)% to Cold and Lightning Resistances
 {variant:1}(10-15)% increased Cold Damage
 {variant:2,3}(25-30)% increased Cold Damage
@@ -66,6 +83,7 @@ League: Domination, Nemesis
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(12-16)% to Fire and Cold Resistances
 {variant:1}(10-15)% increased Fire Damage
 {variant:2}(25-30)% increased Fire Damage
@@ -81,6 +99,7 @@ League: Domination, Nemesis
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(12-16)% to Fire and Lightning Resistances
 {variant:1}Adds 1 to (10-30) Fire Damage to Attacks
 {variant:2}Adds (20-25) to (30-50) Fire Damage to Spells and Attacks
@@ -95,6 +114,7 @@ Requires Level 20
 Blackheart
 Iron Ring
 Upgrade: Upgrades to unique{Voidheart} via prophecy{From The Void}
+Implicits: 1
 Adds 1 to 4 Physical Damage to Attacks
 5% increased Physical Damage
 Adds 1 to 3 Chaos Damage to Attacks
@@ -108,6 +128,7 @@ Source: Upgraded from unique{Blackheart} using prophecy{From The Void}
 Variant: Pre 2.4.0
 Variant: Current
 Requires Level 48
+Implicits: 1
 Adds 1 to 4 Physical Damage to Attacks
 5% increased Physical Damage
 Adds 1 to 3 Chaos Damage to Attacks
@@ -125,6 +146,7 @@ Upgrade: Upgrades to unique{Winterweave} via prophecy{Cold Blooded Fury}
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 24
+Implicits: 1
 +(20-30) to maximum Life
 {variant:1}Adds (7-10) to (15-20) Fire Damage to Attacks
 {variant:2}Adds (12-15) to (25-30) Fire Damage to Attacks
@@ -139,11 +161,12 @@ Winterweave
 Coral Ring
 Source: Upgraded from unique{Bloodboil} via prophecy{Cold Blooded Fury}
 Requires Level 53
-+(20–30) to maximum Life
-Adds (12–15) to (25–30) Fire Damage to Attacks
-Adds (12–15) to (25–30) Cold Damage to Attacks
-+(20–40) to maximum Life
-+(25–30)% to Cold Resistance
+Implicits: 1
++(20-30) to maximum Life
+Adds (12-15) to (25-30) Fire Damage to Attacks
+Adds (12-15) to (25-30) Cold Damage to Attacks
++(20-40) to maximum Life
++(25-30)% to Cold Resistance
 10% increased Movement Speed while Ignited
 The Effect of Chill on you is reversed
 ]],[[
@@ -153,6 +176,7 @@ League: Warbands
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 45
+Implicits: 1
 Has 1 Socket
 {variant:1}+2 to Level of Socketed Golem Gems
 {variant:2}+3 to Level of Socketed Golem Gems
@@ -170,6 +194,7 @@ Two-Stone Ring
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(12-16)% to Cold and Lightning Resistances
 +(15-25) to Intelligence
 (15-25)% increased Lightning Damage
@@ -188,6 +213,7 @@ Variant: Buff Effect
 Variant: Max Fire Resistance
 Variant: Fire Resistance
 Requires Level 52
+Implicits: 1
 +(20-30)% to Fire Resistance
 {fractured}+(20-30) to Strength
 Adds (20-25) to (26-35) Fire Damage
@@ -209,6 +235,7 @@ Variant: Buff Effect
 Variant: Max Cold Resistance
 Variant: Cold Resistance
 Requires Level 52
+Implicits: 1
 +(20-30)% to Cold Resistance
 {fractured}+(20-30) to Dexterity
 Adds (20-25) to (26-35) Cold Damage
@@ -230,6 +257,7 @@ Variant: Buff Effect
 Variant: Sentinels of Purity Damage
 Variant: Physical Damage Reduction
 Requires Level 52
+Implicits: 1
 Adds 1 to 4 Physical Damage to Attacks
 {fractured}+(10-20) to all Attributes
 Adds (8-10) to (13-15) Physical Damage
@@ -251,6 +279,7 @@ Variant: Buff Effect
 Variant: Agony Crawler Damage
 Variant: Chaos Resistance
 Requires Level 52
+Implicits: 1
 +(9-13)% to Chaos Resistance
 {fractured}+(10-20) to all Attributes
 Adds (15-20) to (21-30) Chaos Damage
@@ -272,6 +301,7 @@ Variant: Buff Effect
 Variant: Max Lightning Resistance
 Variant: Lightning Resistance
 Requires Level 52
+Implicits: 1
 +(20-30)% to Lightning Resistance
 {fractured}+(20-30) to Intelligence
 Adds 1 to (48-60) Lightning Damage
@@ -289,6 +319,7 @@ League: Onslaught
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 46
+Implicits: 1
 +(9-13)% to Chaos Resistance
 +(300-350) to Accuracy Rating
 {variant:1}+(60-80) to Armour
@@ -301,6 +332,7 @@ Requires Level 46
 ]],[[
 Doedre's Damning
 Paua Ring
+Implicits: 1
 +(20-30) to maximum Mana
 +(5-10) to Intelligence
 +5% to all Elemental Resistances
@@ -326,9 +358,10 @@ Variant: {2_6}Pre 3.0.0
 Variant: Pre 3.9.0
 Variant: Current
 Requires Level 16
+Implicits: 1
 +(20-30)% to Fire Resistance
 {variant:1}(15-25)% increased Fire Damage
-{variant:2,3}(30–40)% increased Fire Damage
+{variant:2,3}(30-40)% increased Fire Damage
 (5-10)% increased Cast Speed
 {variant:1}5% chance to Ignite
 {variant:2,3}10% chance to Ignite
@@ -342,6 +375,7 @@ Requires Level 16
 Essence Worm
 Unset Ring
 Requires Level 38
+Implicits: 1
 Has 1 Socket
 +2 to Level of Socketed Aura Gems
 Socketed Gems Reserve No Mana
@@ -353,6 +387,7 @@ League: Anarchy
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 28
+Implicits: 1
 (20-30)% increased Global Critical Strike Chance
 {variant:2}Trigger level 10 Consecrate when you deal a Critical Strike
 (30-35)% increased Global Critical Strike Chance
@@ -365,6 +400,7 @@ Requires Level 28
 Heartbound Loop
 Moonstone Ring
 Requires Level 20
+Implicits: 1
 +(15-25) to maximum Energy Shield
 (10-15) Life Regenerated per second
 (20-40)% increased Mana Regeneration Rate
@@ -374,7 +410,8 @@ Minions have 10% increased Area of Effect of Area Skills
 ]],[[
 The Hungry Loop
 Unset Ring
-Requires Level: 45
+Requires Level 45
+Implicits: 1
 Has 1 Socket
 Consumes Socketed Support Gems when they reach Maximum Level
 Can Consume 4 Support Gems
@@ -385,6 +422,7 @@ Coral Ring
 Upgrade: Upgrades to unique{Kaom's Way} via prophecy{The King's Path}
 Variant: Pre 2.0.0
 Variant: Current
+Implicits: 1
 +(20-30) to maximum Life
 +(10-20) to Strength
 {variant:1}0.4% of Physical Attack Damage Leeched as Life
@@ -395,6 +433,7 @@ Kaom's Way
 Coral Ring
 Source: Upgraded from unique{Kaom's Sign} using prophecy{The King's Path}
 Requires Level 32
+Implicits: 1
 +(20-30) to maximum Life
 +(10-20) to Strength
 0.4% of maximum Life Regenerated per second per Endurance Charge
@@ -406,6 +445,7 @@ Topaz Ring
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(20-30)% to Lightning Resistance
 +(10-15) to all Attributes
 {variant:1}(13-17) Life Regenerated per second
@@ -419,6 +459,7 @@ Iron Ring
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 24
+Implicits: 1
 Adds 1 to 4 Physical Damage to Attacks
 {variant:1}(10-20)% increased Damage
 {variant:2}(10-30)% increased Damage
@@ -450,6 +491,7 @@ Variant: {2_6}Pre 3.5.0
 Variant: Current
 Sockets: W
 Requires Level 5
+Implicits: 1
 Has 1 Socket
 {variant:1}−25% to all Elemental Resistances
 {variant:2,3}−20% to all Elemental Resistances
@@ -464,6 +506,7 @@ Socketed Gems have Elemental Equilibrium
 Mark of Submission
 Unset Ring
 Requires Level 24
+Implicits: 1
 Has 1 Socket
 Curse Enemies with Socketed Curse Gem on Hit
 ]],[[
@@ -471,11 +514,12 @@ Mark of the Elder
 Steel Ring
 Source: Drops from unique{The Elder} (Uber)
 Requires Level 80
-Adds (3–4) to (10–14) Physical Damage to Attacks
-Adds (26–32) to (42–48) Cold Damage to Attacks
-(6–10)% increased maximum Energy Shield
-(6–10)% increased maximum Life
-(60–80)% increased Attack Damage if your other Ring is a Shaper Item
+Implicits: 1
+Adds (3-4) to (10-14) Physical Damage to Attacks
+Adds (26-32) to (42-48) Cold Damage to Attacks
+(6-10)% increased maximum Energy Shield
+(6-10)% increased maximum Life
+(60-80)% increased Attack Damage if your other Ring is a Shaper Item
 Cannot be Stunned by Attacks if your other Ring is an Elder Item
 20% chance to Trigger Level 20 Tentacle Whip on Kill
 Elder Item
@@ -484,11 +528,12 @@ Mark of the Shaper
 Opal Ring
 Source: Drops from unique{The Elder} (Uber)
 Requires Level 80
-(15–25)% increased Elemental Damage
-Adds (13–18) to (50–56) Lightning Damage to Spells
-(6–10)% increased maximum Energy Shield
-(6–10)% increased maximum Life
-(60–80)% increased Spell Damage if your other Ring is an Elder Item
+Implicits: 1
+(15-25)% increased Elemental Damage
+Adds (13-18) to (50-56) Lightning Damage to Spells
+(6-10)% increased maximum Energy Shield
+(6-10)% increased maximum Life
+(60-80)% increased Spell Damage if your other Ring is an Elder Item
 Cannot be Stunned by Spells if your other Ring is a Shaper Item
 20% chance to Trigger Level 20 Summon Volatile Anomaly on Kill
 Shaper Item
@@ -499,19 +544,21 @@ Variant: Pre 2.6.0
 Variant: {2_6}Pre 3.0.0
 Variant: Current
 Requires Level 69
+Implicits: 1
 +(9-13)% to Chaos Resistance
 {variant:1}15% reduced maximum Life
 {variant:2}10% reduced maximum Life
-{variant:3}(5–10)% reduced maximum Life
+{variant:3}(5-10)% reduced maximum Life
 {variant:1}15% reduced maximum Energy Shield
 {variant:2}10% reduced maximum Energy Shield
-{variant:3}(5–10)% reduced maximum Energy Shield
+{variant:3}(5-10)% reduced maximum Energy Shield
 +(40-50)% to Chaos Resistance
 Gain 20% of Physical Damage as Extra Chaos Damage
 ]],[[
 Mokou's Embrace
 Ruby Ring
 Requires Level 16
+Implicits: 1
 +(20-30)% to Fire Resistance
 (15-25)% increased Fire Damage
 +(25-40)% to Cold Resistance
@@ -526,6 +573,7 @@ League: Warbands
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 45
+Implicits: 1
 Has 1 Socket
 {variant:1}+2 to Level of Socketed Golem Gems
 {variant:2}+3 to Level of Socketed Golem Gems
@@ -544,6 +592,7 @@ League: Bloodlines
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 29
+Implicits: 1
 +(20-30)% to Fire Resistance
 +(15-25) to Strength
 {variant:1}Adds (8-10) to (12-14) Fire Damage to Attacks
@@ -558,6 +607,7 @@ The Pariah
 Unset Ring
 League: Warbands
 Requires Level 60
+Implicits: 1
 Has 1 Socket
 +2 to Level of Socketed Gems
 (5-10)% increased Attack and Cast Speed
@@ -570,18 +620,20 @@ Perandus Signet
 Paua Ring
 Variant: Pre 2.0.0
 Variant: Current
+Implicits: 1
 +(20-30) to maximum Mana
 +(25-30) to maximum Mana
 (45-65)% increased Mana Regeneration Rate
 {variant:1}3% increased Experience gain
 {variant:2}2% increased Experience gain
-{variant:1}3% increased Intelligence for each Unique Item you have equipped
-{variant:2}2% increased Intelligence for each Unique Item you have equipped
+{variant:1}3% increased Intelligence for each Unique Item Equipped
+{variant:2}2% increased Intelligence for each Unique Item Equipped
 3% additional chance for Slain monsters to drop Scrolls of Wisdom
 ]],[[
 Praxis
 Paua Ring
 Requires Level 22
+Implicits: 1
 +(20-30) to maximum Mana
 +(30-60) to maximum Mana
 (3-6) Mana Regenerated per second
@@ -593,6 +645,7 @@ Topaz Ring
 League: Delve
 Source: Drops from unique{Kurgal, the Blackblooded}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Lightning Resistance
 +20 to Intelligence
 5% increased maximum Energy Shield
@@ -603,6 +656,7 @@ Topaz Ring
 League: Delve
 Source: Drops from unique{Aul, the Crystal King}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Lightning Resistance
 +20 to Intelligence
 5% increased maximum Energy Shield
@@ -613,6 +667,7 @@ Topaz Ring
 League: Delve
 Source: Drops from unique{Ahuatotli, the Blind}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Lightning Resistance
 +20 to Intelligence
 5% increased maximum Energy Shield
@@ -624,10 +679,11 @@ Variant: Pre 2.6.0
 Variant: {2_6}Pre 3.0.0
 Variant: Current
 Requires Level 11
+Implicits: 1
 +(20-30)% to Cold Resistance
 +(25-35)% to Fire Resistance
 {variant:1,2}(25-35)% increased Burning Damage
-{variant:3}(60–80)% increased Burning Damage
+{variant:3}(60-80)% increased Burning Damage
 {variant:1}100% of Cold Damage Converted to Fire Damage
 {variant:2,3}40% of Cold Damage Converted to Fire Damage
 10% increased Light Radius
@@ -639,6 +695,7 @@ League: Warbands
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 45
+Implicits: 1
 Has 1 Socket
 {variant:1}+2 to Level of Socketed Golem Gems
 {variant:2}+3 to Level of Socketed Golem Gems
@@ -656,6 +713,7 @@ Two-Stone Ring
 League: Talisman
 Source: Drops from unique{Rigwald, the Wolven King} (Level 60+)
 Requires Level 49
+Implicits: 1
 +(12-16)% to Fire and Cold Resistances
 (20-30)% increased Fire Damage
 (20-30)% increased Cold Damage
@@ -668,6 +726,7 @@ Variant: Pre 1.1.0
 Variant: Pre 2.2.0
 Variant: Current
 Requires Level 60
+Implicits: 1
 (20-30)% increased Global Critical Strike Chance
 +333 to Accuracy Rating
 {variant:1}+(10-20)% to Global Critical Strike Multiplier
@@ -705,6 +764,7 @@ Variant: {2_6}Pre 3.0.0
 Variant: Pre 3.9.0
 Variant: Current
 Requires Level 45
+Implicits: 1
 +(20-30) to maximum Life
 {variant:1,2,3}(20-30)% increased Elemental Damage with Weapons
 {variant:4,5}(20-30)% increased Elemental Damage with Attack Skills
@@ -724,6 +784,7 @@ Variant: Pre {2_6}3.5.0
 Variant: Current
 Source: Drops from unique{Guardian of the Hydra}
 Requires Level 68
+Implicits: 1
 +(20-30)% to Cold Resistance
 (20-40)% increased Cold Damage
 (5-10)% increased Cast Speed
@@ -737,11 +798,12 @@ Requires Level 68
 Stormfire
 Opal Ring
 Requires Level 80
-(15–25)% increased Elemental Damage
-(40–45)% increased Mana Regeneration Rate
-+(20–30)% to Fire and Lightning Resistances
-(4–6)% increased Burning Damage for each Enemy you have Shocked Recently
-Adds (1–3) to (62–70) Lightning Damage to Hits against Ignited Enemies
+Implicits: 1
+(15-25)% increased Elemental Damage
+(40-45)% increased Mana Regeneration Rate
++(20-30)% to Fire and Lightning Resistances
+(4-6)% increased Burning Damage for each Enemy you have Shocked Recently
+Adds (1-3) to (62-70) Lightning Damage to Hits against Ignited Enemies
 Your Lightning Damage can Ignite
 ]],[[
 The Taming
@@ -751,11 +813,12 @@ Source: Vendor recipe
 Variant: {2_6}Pre 3.0.0
 Variant: Current
 Requires Level 30
+Implicits: 1
 +(8-10)% to all Elemental Resistances
 {variant:1}15% increased Elemental Damage with Weapons
 {variant:2}30% increased Elemental Damage with Attack Skills
 {variant:1}+(10-15)% to all Elemental Resistances
-{variant:2}+(20–30)% to all Elemental Resistances
+{variant:2}+(20-30)% to all Elemental Resistances
 {variant:1}15% increased Elemental Damage
 {variant:2}30% increased Elemental Damage
 {variant:1}5% chance to Freeze, Shock and Ignite
@@ -769,6 +832,7 @@ League: Bloodlines
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 20
+Implicits: 1
 +(20-30)% to Cold Resistance
 {variant:1}Adds 10 to 15 Physical Damage to Attacks against Frozen Enemies
 {variant:2}Adds 40 to 60 Cold Damage against Chilled Enemies
@@ -807,6 +871,7 @@ Upgrade: Upgrades to unique{Timetwist} via prophecy{A Rift in Time}
 Variant: Pre 2.6.0
 Variant: Current
 Requires Level 22
+Implicits: 1
 +(15-25) to maximum Energy Shield
 (10-15)% increased Attack Speed
 {variant:1}(5-8)% increased Cast Speed
@@ -822,12 +887,13 @@ Timetwist
 Moonstone Ring
 Source: Upgraded from unique{Timeclasp} via prophecy{A Rift in Time}
 Requires Level 64
-+(15–25) to maximum Energy Shield
-(10–15)% increased Attack Speed
-(5–10)% increased Cast Speed
-+(30–50) to maximum Energy Shield
+Implicits: 1
++(15-25) to maximum Energy Shield
+(10-15)% increased Attack Speed
+(5-10)% increased Cast Speed
++(30-50) to maximum Energy Shield
 15% increased Mana Regeneration Rate
-(-10–10)% increased Skill Effect Duration
+(-10-10)% increased Skill Effect Duration
 Unaffected by Temporal Chains
 ]],[[
 Uzaza's Meadow
@@ -835,6 +901,7 @@ Sapphire Ring
 League: Delve
 Source: Drops from unique{Ahuatotli, the Blind}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Cold Resistance
 +20 to Dexterity
 5% increased maximum Energy Shield
@@ -845,6 +912,7 @@ Sapphire Ring
 League: Delve
 Source: Drops from unique{Kurgal, the Blackblooded}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Cold Resistance
 +20 to Dexterity
 5% increased maximum Energy Shield
@@ -855,6 +923,7 @@ Sapphire Ring
 League: Delve
 Source: Drops from unique{Aul, the Crystal King}
 Requires Level 49
+Implicits: 1
 +(20-30)% to Cold Resistance
 +20 to Dexterity
 5% increased maximum Energy Shield
@@ -867,6 +936,7 @@ Variant: Pre 2.6.0
 Variant: {2_6}Pre 3.0.0
 Variant: Current
 Requires Level 38
+Implicits: 1
 +(20-30)% to Lightning Resistance
 {variant:1}15% increased Damage against Shocked Enemies
 {variant:2}40% increased Damage against Shocked Enemies
@@ -880,6 +950,7 @@ Requires Level 38
 Valyrium
 Moonstone Ring
 Requires Level 38
+Implicits: 1
 +(15-25) to maximum Energy Shield
 +(10-20) to maximum Energy Shield
 +(20-30)% to Fire Resistance
@@ -889,6 +960,7 @@ Stun Threshold is based on Energy Shield instead of Life
 Ventor's Gamble
 Gold Ring
 Requires Level 65
+Implicits: 1
 (6-15)% increased Rarity of Items found
 +(0-60) to maximum Life
 (−10 to 10)% increased Quantity of Items found
@@ -912,10 +984,11 @@ Variant: Minimum Frenzy Charges
 Variant: Minimum Power Charges
 Variant: Minimum Endurance Charges
 Requires Level 45
+Implicits: 1
 Has 1 Socket
 +5 to Level of Socketed Aura Gems
 Socketed Gems have 10% increased Mana Reservation
-+(15–25) to all Attributes
++(15-25) to all Attributes
 15 Life Regenerated per second for each Uncorrupted Item Equipped
 -2 to Total Mana Cost of Skills for each Corrupted Item Equipped
 {variant:1}{crafted}+(8-15)% to Fire and Chaos Resistances
@@ -934,15 +1007,29 @@ Voideye
 Unset Ring
 League: Ambush, Invasion
 Requires Level 45
+Implicits: 1
 Has 1 Socket
 +5 to Level of Socketed Gems
 ]],[[
 The Warden's Brand
 Iron Ring
 Requires Level 30
+Implicits: 1
 Adds 1 to 4 Physical Damage to Attacks
-Adds (5–15) to (25–50) Physical Damage to Attacks
+Adds (5-15) to (25-50) Physical Damage to Attacks
 30% reduced Attack Speed
 15% chance to gain a Frenzy Charge when you Stun an Enemy
+]],[[
+Warrior's Legacy
+Ruby Ring
+League: Metamorph
+Requires Level 16
+Implicits: 1
++(20-30)% to Fire Resistance
++(30-50) to Strength
+(20-25)% increased Melee Damage
+30% chance to Avoid being Stunned
+20% less Attack Speed
+Strike Skills also target the previous location they were Used
 ]],
 }
