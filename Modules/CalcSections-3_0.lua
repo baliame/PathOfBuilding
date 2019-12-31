@@ -894,6 +894,7 @@ return {
 		{ label = "Sources", modName = { "ManaRegen", "ManaRegenPercent" }, modType = "BASE" },
 		{ label = "Recovery modifiers", modName = "ManaRecovery" },
 	}, },
+	{ label = "Spent recently", { format = "{0:output:ManaSpentRecently}" }, } ,
 } },
 { 1, "EnergyShield", 2, "Energy Shield", colorCodes.DEFENCE, {
 	extra = "{0:output:EnergyShield}",

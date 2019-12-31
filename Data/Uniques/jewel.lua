@@ -1187,12 +1187,14 @@ Limited to: 1
 [[
 Lethal Pride
 Timeless Jewel
+League: Legion
 Variant: Kaom
 Variant: Kiloava
 Variant: Rakiata
-Limited to: 1 Historic
+Limited to: 1
 Source: Drops from normal{Karui} legion
 Radius: Large
+Implicits: 0
 {variant:1}Commanded leadership over (10000-18000) warriors under Kaom
 {variant:2}Commanded leadership over (10000-18000) warriors under Kiloava
 {variant:3}Commanded leadership over (10000-18000) warriors under Rakiata
@@ -1202,12 +1204,14 @@ Historic
 [[
 Glorious Vanity
 Timeless Jewel
+League: Legion
 Variant: Doryani
 Variant: Xibaqua
 Variant: Zerphi
-Limited to: 1 Historic
+Limited to: 1
 Source: Drops from normal{Vaal} legion
 Radius: Large
+Implicits: 0
 {variant:1}Bathed in the blood of (100-8000) sacrified in the name of Doryani
 {variant:2}Bathed in the blood of (100-8000) sacrified in the name of Xibaqua
 {variant:3}Bathed in the blood of (100-8000) sacrified in the name of Zerphi

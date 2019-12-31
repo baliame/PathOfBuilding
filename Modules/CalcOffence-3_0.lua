@@ -1341,6 +1341,9 @@ function calcs.offence(env, actor, activeSkill)
 		t_insert(breakdown.TotalDPS, s_format("= %.1f", output.TotalDPS))
 	end
 
+	-- Calculate mana spent recently
+	output.ManaSpentRecently = (output.HitSpeed or output.Speed) and (output.HitSpeed or output.Speed) * output.ManaCost * 4 or 0
+
 	-- Calculate leech rates
 	output.LifeLeechInstanceRate = output.Life * 0.02 * calcLib.mod(skillModList, skillCfg, "LifeLeechRate")
 	output.LifeLeechRate = output.LifeLeechInstantRate * output.LifeRecoveryMod + m_min(output.LifeLeechInstances * output.LifeLeechInstanceRate, output.MaxLifeLeechRate) * output.LifeRecoveryRateMod

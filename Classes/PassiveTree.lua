@@ -32,36 +32,64 @@ local function getFile(URL)
 end
 
 -- Hack: Legion and blight keystones
+function copy(obj, seen)
+	if type(obj) ~= 'table' then return obj end
+	if seen and seen[obj] then return seen[obj] end
+	local s = seen or {}
+	local res = setmetatable({}, getmetatable(obj))
+	s[obj] = res
+	for k, v in pairs(obj) do res[copy(k, s)] = copy(v, s) end
+	return res
+end
+
+local AdditionalKeystoneGroups={
+	[9999091]={["x"]=-2000.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999991}},
+	[9999092]={["x"]=-1800.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999992}},
+	[9999093]={["x"]=-1600.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999993}},
+	[9999094]={["x"]=-1400.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999994}},
+	[9999095]={["x"]=-1200.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999995}},
+	[9999096]={["x"]=-1000.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999996}},
+	[9999097]={["x"]=-800.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999997}},
+	[9999098]={["x"]=-600.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999998}},
+	[9999099]={["x"]=-400.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999999}},
+	[9999081]={["x"]=-200.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999981}},
+	[9999082]={["x"]=-0.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999982}},
+	[9999083]={["x"]=200.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999983}},
+	[9999084]={["x"]=400.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999984}},
+	[9999085]={["x"]=600.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999985}},
+	[9999086]={["x"]=800.22349,["y"]=-8758.45,["oo"]={[0]=true},["n"]={[0]=9999986}},
+}
+
 local AdditionalKeystoneNodes={
-	[9999991]={["id"]=9999991,["dn"]="Divine Flesh",["g"]=1,["in"]={[0]=9999991},["sd"]={"All Damage taken bypasses Energy Shield\n50% of Elemental Damage taken as Chaos Damage\n+10% to maximum Chaos Resistance"},
+	[9999991]={["id"]=9999991,["dn"]="Divine Flesh",["g"]=9999091,["in"]={[0]=9999991},["sd"]={"All Damage taken bypasses Energy Shield\n50% of Elemental Damage taken as Chaos Damage\n+10% to maximum Chaos Resistance"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999992]={["id"]=9999992,["dn"]="Eternal Youth",["g"]=1,["in"]={[0]=9999992},["sd"]={"50% less Life Regeneration Rate\n50% less maximum Total Recovery per Second from Life Leech\nEnergy Shield Recharge instead applies to Life"},
+	[9999992]={["id"]=9999992,["dn"]="Eternal Youth",["g"]=9999092,["in"]={[0]=9999992},["sd"]={"50% less life regeneration rate\n50% less maximum Total Recovery per Second from Life Leech\nEnergy Shield Recharge instead applies to Life"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999993]={["id"]=9999993,["dn"]="Corrupted Soul",["g"]=1, ["in"]={[0]=9999993},["sd"]={"50% of Non-Chaos Damage taken bypasses Energy Shield\nGain 20% of Maximum Life as Extra Maximum Energy Shield"},
+	[9999993]={["id"]=9999993,["dn"]="Corrupted Soul",["g"]=9999093, ["in"]={[0]=9999993},["sd"]={"50% of Non-Chaos Damage taken bypasses Energy Shield\nGain 20% of Maximum Life as Extra Maximum Energy Shield"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999994]={["id"]=9999994,["dn"]="Strength Of Blood",["g"]=1, ["in"]={[0]=9999994},["sd"]={"Recovery from Life Leech is not applied\n1% less Damage taken for every 2% Recovery per second from Life Leech"},
+	[9999994]={["id"]=9999994,["dn"]="Strength Of Blood",["g"]=9999094, ["in"]={[0]=9999994},["sd"]={"Recovery from Life Leech is not applied\n1% less Damage taken for every 2% Recovery per second from Life Leech"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999995]={["id"]=9999995,["dn"]="Tempered By War",["g"]=1, ["in"]={[0]=9999995},["sd"]={"50% of Cold and Lightning Damage taken as Fire Damage\n50% less Cold Resistance\n50% less Lightning Resistance"},
+	[9999995]={["id"]=9999995,["dn"]="Tempered By War",["g"]=9999095, ["in"]={[0]=9999995},["sd"]={"50% of Cold and Lightning Damage taken as Fire Damage\n50% less Cold Resistance\n50% less Lightning Resistance"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999996]={["id"]=9999996,["dn"]="Glancing Blows",["g"]=1, ["in"]={[0]=9999996},["sd"]={"Chance to Block Attack Damage is doubled\nChance to Block Spell Damage is doubled\nYou take 50% of Damage from Blocked Hits"},
+	[9999996]={["id"]=9999996,["dn"]="Glancing Blows",["g"]=9999096, ["in"]={[0]=9999996},["sd"]={"Chance to Block Attack Damage is doubled\nChance to Block Spell Damage is doubled\nYou take 50% of Damage from Blocked Hits"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999997]={["id"]=9999997,["dn"]="Wind Dancer",["g"]=1, ["in"]={[0]=9999997},["sd"]={"20% less Damage taken if you haven't been Hit Recently\n40% less Evasion Rating if you haven't been Hit Recently\n20% more Evasion Rating if you've been Hit Recently"},
+	[9999997]={["id"]=9999997,["dn"]="Wind Dancer",["g"]=9999097, ["in"]={[0]=9999997},["sd"]={"20% less Damage taken if you haven't been Hit Recently\n40% less Evasion Rating if you haven't been Hit Recently\n20% more Evasion Rating if you've been Hit Recently"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999998]={["id"]=9999998,["dn"]="Dance With Death",["g"]=1, ["in"]={[0]=9999998},["sd"]={"Can't use Helmets\nYour Critical Strike Chance is Lucky\nYour Damage with Critical Strikes is Lucky\nEnemies' Damage with Critical Strikes against you is Lucky"},
+	[9999998]={["id"]=9999998,["dn"]="Dance With Death",["g"]=9999098, ["in"]={[0]=9999998},["sd"]={"Can't use Helmets\nYour Critical Strike Chance is Lucky\nYour Damage with Critical Strikes is Lucky\nEnemies' Damage with Critical Strikes against you is Lucky"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999999]={["id"]=9999999,["dn"]="Second Sight",["g"]=1, ["in"]={[0]=9999999},["sd"]={"You are Blind\nBlind does not affect your Light Radius\n25% more Melee Critical Strike Chance while Blinded"},
+	[9999999]={["id"]=9999999,["dn"]="Second Sight",["g"]=9999099, ["in"]={[0]=9999999},["sd"]={"You are Blind\nBlind does not affect your Light Radius\n25% more Melee Critical Strike Chance while Blinded"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999981]={["id"]=9999981,["dn"]="The Agnostic",["g"]=1, ["in"]={[0]=9999981},["sd"]={"Maximum Energy Shield is 0\nWhile not on Full Life, Sacrifice 20% of Mana per Second to Recover that much Life"},
+	[9999981]={["id"]=9999981,["dn"]="The Agnostic",["g"]=9999081, ["in"]={[0]=9999981},["sd"]={"Maximum Energy Shield is 0\nWhile not on Full Life, Sacrifice 20% of Mana per Second to Recover that much Life"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999982]={["id"]=9999982,["dn"]="Inner Conviction",["g"]=1, ["in"]={[0]=9999982},["sd"]={"3% more Spell Damage per Power Charge\nGain Power Charges instead of Frenzy Charges"},
+	[9999982]={["id"]=9999982,["dn"]="Inner Conviction",["g"]=9999082, ["in"]={[0]=9999982},["sd"]={"3% more Spell Damage per Power Charge\nGain Power Charges instead of Frenzy Charges"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999983]={["id"]=9999983,["dn"]="Power of Purpose",["g"]=1, ["in"]={[0]=9999983},["sd"]={"80% of Maximum Mana is Converted to twice that much Armour"},
+	[9999983]={["id"]=9999983,["dn"]="Power of Purpose",["g"]=9999083, ["in"]={[0]=9999983},["sd"]={"80% of Maximum Mana is Converted to twice that much Armour"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999984]={["id"]=9999984,["dn"]="Supreme Decadence",["g"]=1, ["in"]={[0]=9999984},["sd"]={"Life Recovery from Flasks also applies to Energy Shield\n30% less Life Recovery from Flasks"},
+	[9999984]={["id"]=9999984,["dn"]="Supreme Decadence",["g"]=9999084, ["in"]={[0]=9999984},["sd"]={"Life Recovery from Flasks also applies to Energy Shield\n30% less Life Recovery from Flasks"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999985]={["id"]=9999985,["dn"]="Supreme Grandstanding",["g"]=1, ["in"]={[0]=9999985},["sd"]={"Nearby Allies and Enemies Share Charges with you\nEnemies Hitting you have 10% chance to gain an Endurance, Frenzy or Power Charge"},
+	[9999985]={["id"]=9999985,["dn"]="Supreme Grandstanding",["g"]=9999085, ["in"]={[0]=9999985},["sd"]={"Nearby Allies and Enemies Share Charges with you\nEnemies Hitting you have 10% chance to gain an Endurance, Frenzy or Power Charge"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
-	[9999986]={["id"]=9999986,["dn"]="Supreme Ego",["g"]=1, ["in"]={[0]=9999986},["sd"]={"You can only have one Aura on you from your Skills\nYour Aura Skills do not affect Allies\n50% more Effect of Auras from your Skills on you\n50% more Mana Reserved"},
+	[9999986]={["id"]=9999986,["dn"]="Supreme Ego",["g"]=9999086, ["in"]={[0]=9999986},["sd"]={"You can only have one Aura on you from your Skills\nYour Aura Skills do not affect Allies\n50% more Effect of Auras from your Skills on you\n50% more Mana Reserved"},
 		["m"]=false,["icon"]="Art/2DArt/SkillIcons/passives/stormborn.png",["ks"]=true,["not"]=false,["isJewelSocket"]=false,["isMultipleChoice"]=false,["isMultipleChoiceOption"]=false,["passivePointsGranted"]=0,["spc"]={},["o"]=0,["oidx"]=0,["sa"]=0,["da"]=0,["ia"]=0,["out"]={},},
 }
 
@@ -199,10 +227,14 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 
 	--local err, passives = PLoadModule("Data/"..treeVersion.."/Passives.lua")
 
-	ConPrintf("Processing tree...")
+	ConPrintf("Processing tree %s...", treeVersion)
+
+	for id, group in pairs(AdditionalKeystoneGroups) do
+		self.groups[id] = group
+	end
 
 	for id, node in pairs(AdditionalKeystoneNodes) do
-		self.nodes[id] = node
+		self.nodes[id] = copy(node)
 	end
 
 	self.keystoneMap = { }
@@ -234,7 +266,6 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 		elseif node.ks then
 			node.type = "Keystone"
 			self.keystoneMap[node.dn] = node
-			ConPrintf("Added %s as a keystone.", node.dn)
 		elseif node["not"] then
 			node.type = "Notable"
 			self.notableMap[node.dn:lower()] = node
@@ -290,7 +321,8 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 				end
 			end
 			local line = node.sd[i]
-			local list, extra = modLib.parseMod[self.targetVersion](line, false, true)
+			local debugs = false
+			local list, extra = modLib.parseMod[self.targetVersion](line, false, debugs)
 			if not list or extra then
 				-- Try to combine it with one or more of the lines that follow this one
 				local endI = i + 1
@@ -299,7 +331,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 					for ci = i + 1, endI do
 						comb = comb .. " " .. node.sd[ci]
 					end
-					list, extra = modLib.parseMod[self.targetVersion](comb, true)
+					list, extra = modLib.parseMod[self.targetVersion](comb, true, debugs)
 					if list and not extra then
 						-- Success, add dummy mod lists to the other lines that were combined with this one
 						for ci = i + 1, endI do

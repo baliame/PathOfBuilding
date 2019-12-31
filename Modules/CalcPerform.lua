@@ -171,7 +171,7 @@ local function doActorAttribsPoolsConditions(env, actor)
 				breakdown[stat] = breakdown.simple(nil, nil, output[stat], stat)
 			end
 		end
-		
+
 		output.LowestAttribute = m_min(output.Str, output.Dex, output.Int)
 		condList["DexHigherThanInt"] = output.Dex > output.Int
 		condList["StrHigherThanDex"] = output.Str > output.Dex
@@ -714,9 +714,10 @@ function calcs.perform(env)
 					local modStore = buff.activeSkillBuff and skillModList or modDB
 				 	if not buff.applyNotPlayer then
 						activeSkill.buffSkill = true
-						modDB.conditions["AffectedBy"..buff.name:gsub(" ","")] = true
+						local buffName = buff.name:gsub(" ","")
+						modDB.conditions["AffectedBy"..buffName] = true
 						local srcList = new("ModList")
-						local inc = modStore:Sum("INC", skillCfg, "BuffEffect", "BuffEffectOnSelf", "BuffEffectOnPlayer")
+						local inc = modStore:Sum("INC", skillCfg, "BuffEffect", "BuffEffectOnSelf", "BuffEffectOnPlayer", buffName.."BuffEffect")
 						local more = modStore:More(skillCfg, "BuffEffect", "BuffEffectOnSelf")
 						srcList:ScaleAddList(buff.modList, (1 + inc / 100) * more)
 						mergeBuff(srcList, buffs, buff.name)

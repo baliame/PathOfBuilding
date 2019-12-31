@@ -5,16 +5,6 @@
 data.uniques.new = {
 -- New
 [[
-Glorious Vanity
-Timeless Jewel
-League: Legion
-Source: Drops from normal{Vaal} legion
-Limited to: 1 Historic
-Radius: Large
-Bathed in the blood of (100-8000) sacrificed in the name of Doryani
-Passives in radius are Conquered by the Vaal
-Historic
-]],[[
 Brutal Restraint
 Timeless Jewel
 League: Legion
@@ -33,16 +23,6 @@ Limited to: 1 Historic
 Radius: Large
 Commissioned (2000-160000) coins to commemorate Cadiro
 Passives in radius are Conquered by the Eternal Empire
-Historic
-]],[[
-Lethal Pride
-Timeless Jewel
-League: Legion
-Source: Drops from normal{Karui} legion
-Limited to: 1 Historic
-Radius: Large
-Commanded leadership over (10000-18000) warriors under Kaom
-Passives in radius are Conquered by the Karui
 Historic
 ]],[[
 Militant Faith

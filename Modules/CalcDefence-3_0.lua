@@ -293,14 +293,17 @@ function calcs.defence(env, actor)
 		if lifePercent > 0 then
 			modDB:NewMod("EnergyShieldRegenPercent", "BASE", lifePercent, "Zealot's Oath")
 		end
+		local more = modDB:More(nil, "LifeRegen")
+		modDB:NewMod("EnergyShieldRegen", "MORE", more, "Zealot's Oath")
 	else
 		local lifeBase = modDB:Sum("BASE", nil, "LifeRegen")
 		local lifePercent = modDB:Sum("BASE", nil, "LifeRegenPercent")
+		local more = modDB:More(nil, "LifeRegen")
 		if lifePercent > 0 then
 			lifeBase = lifeBase + output.Life * lifePercent / 100
 		end
 		if lifeBase > 0 then
-			output.LifeRegen = lifeBase * output.LifeRecoveryRateMod
+			output.LifeRegen = lifeBase * more * output.LifeRecoveryRateMod
 		else
 			output.LifeRegen = 0
 		end

@@ -74,6 +74,7 @@ local modNameList = {
 	["attributes"] = { "Str", "Dex", "Int" },
 	["all attributes"] = { "Str", "Dex", "Int" },
 	-- Life/mana
+	["life regeneration rate"] = "LifeRegen",
 	["life"] = "Life",
 	["maximum life"] = "Life",
 	["mana"] = "Mana",
@@ -438,6 +439,8 @@ local modNameList = {
 	["strength and intelligence requirement"] = { "StrRequirement", "IntRequirement" },
 	["attribute requirements"] = { "StrRequirement", "DexRequirement", "IntRequirement" },
 	["effect of socketed jewels"] = "SocketedJewelEffect",
+	["effect of arcane surge"] = "ArcaneSurgeBuffEffect",
+	["effect of arcane surge on you"] = "ArcaneSurgeBuffEffect",
 	-- Impale
 	["to impale"] = "ImpaleChance",
 	["to impale enemies"] = "ImpaleChance",
@@ -756,6 +759,7 @@ local modTagList = {
 	["for each summoned totem"] = { tag = { type = "PerStat", stat = "ActiveTotemLimit" } },
 	["for each time they have chained"] = { tag = { type = "PerStat", stat = "Chain" } },
 	["for each time it has chained"] = { tag = { type = "PerStat", stat = "Chain" } },
+	["per (%d+) mana spent recently, up to (%d+)%%"] = function (num, _, limit) return { tag = { type = "PerStat", stat = "ManaSpentRecently", div = num, limit = tonumber(limit), limitTotal = true } } end,
 	-- Stat conditions
 	["with (%d+) or more strength"] = function(num) return { tag = { type = "StatThreshold", stat = "Str", threshold = num } } end,
 	["with at least (%d+) strength"] = function(num) return { tag = { type = "StatThreshold", stat = "Str", threshold = num } } end,
@@ -1094,6 +1098,7 @@ local specialModList = {
 		mod("CooldownRecovery", "INC", num, { type = "SkillName", skillNameList = { "Blink Arrow", "Mirror Arrow" } }),
 	} end,
 	["if you've used a skill recently, you and nearby allies have tailwind"] = { mod("ExtraAura", "LIST", { mod = flag("Condition:Tailwind") }, { type = "Condition", var = "UsedSkillRecently" }) },
+	["you have tailwind if you have dealt a critical strike recently"] = { mod("ExtraAura", "LIST", { mod = flag("Condition:Tailwind") }, { type = "Condition", var = "CritRecently" }) },
 	["projectiles deal (%d+)%% more damage for each remaining chain"] = function(num) return { mod("Damage", "MORE", num, nil, ModFlag.Projectile, { type = "PerStat", stat = "ChainRemaining" }) } end,
 	["far shot"] = { flag("FarShot") },
 	-- Elementalist
@@ -1229,6 +1234,12 @@ local specialModList = {
 	["%+(%d+) to level of all cold spell skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "spell", "cold", "active_skill" }, key = "level", value = num }) } end,
 	["%+(%d+) to level of all fire spell skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "spell", "fire", "active_skill" }, key = "level", value = num }) } end,
 	["%+(%d+) to level of all chaos spell skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "spell", "chaos", "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all physical skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "physical", "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all lightning skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "lightning", "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all cold skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "cold", "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all fire skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "fire", "active_skill" }, key = "level", value = num }) } end,
+	["%+(%d+) to level of all chaos skill gems"] = function(num) return { mod("GemProperty", "LIST", { keywordList = { "chaos", "active_skill" }, key = "level", value = num }) } end,
 	["%+(%d+) to level of all (.+) gems"] = function(num, _, skill) return { mod("GemProperty", "LIST", {keyword = skill, key = "level", value = num }) } end,
 	-- Extra skill/support
 	["grants (%D+)"] = function(_, skill) return extraSkill(skill, 1) end,
@@ -2094,7 +2105,7 @@ local jewelOtherDynamicFuncs = {
 	function(node, sd)
 		if node then
 			if node.type == "Keystone" then
-				return {"Strength in Blood", "Recovery from Life Leech is not applied", "1% less Damage taken for every 2% Recovery per second from Life Leech"}
+				return {"Strength in Blood"}
 			elseif node.type == "Normal" then
 				tr = copyTable(sd)
 				t_insert(tr, "+2 to Strength")
@@ -2117,7 +2128,7 @@ local jewelOtherDynamicFuncs = {
 	function(node, sd)
 		if node then
 			if node.type == "Keystone" then
-				return {"Glancing Blows", "Chance to Block Attack Damage is doubled", "Chance to Block Spell Damage is doubled", "You take 50% of Damage from Blocked Hits"}
+				return {"Glancing Blows"}
 			elseif node.type == "Normal" then
 				tr = copyTable(sd)
 				t_insert(tr, "+2 to Strength")
@@ -2155,10 +2166,76 @@ local jewelOtherDynamicFuncs = {
 	function(node, sd)
 		if node then
 			if node.type == "Keystone" then
-				return {"Tempered By War", "50% of Cold and Lightning Damage taken as Fire Damage", "50% less Cold Resistance", "50% less Lightning Resistance"}
+				return {"Tempered By War"}
 			elseif node.type == "Normal" then
 				tr = copyTable(sd)
 				t_insert(tr, "+2 to Strength")
+				return tr
+			end
+		end
+		return sd
+	end},
+	["Bathed in the blood of (%d+) sacrified in the name of Doryani"] = {function(node, out, data, caps)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("CorruptedSoul", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			else
+				out:NewMod("PassiveSkillHasNoEffect", "FLAG", true, data.modSource)
+			end
+			out:NewMod("VaalSeed", "BASE", caps[1])
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Corrupted Soul"}
+			else
+				local tr = {"[Random modifier]"}
+				return tr
+			end
+		end
+		return sd
+	end},
+	["Bathed in the blood of (%d+) sacrified in the name of Xibaqua"] = {function(node, out, data, caps)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("DivineFlesh", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			else
+				out:NewMod("PassiveSkillHasNoEffect", "FLAG", true, data.modSource)
+			end
+			out:NewMod("VaalSeed", "BASE", caps[1])
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Divine Flesh"}
+			else
+				local tr = {"[Random modifier]"}
+				return tr
+			end
+		end
+		return sd
+	end},
+	["Bathed in the blood of (%d+) sacrified in the name of Zerphi"] = {function(node, out, data, caps)
+		if node then
+			if node.type == "Keystone" and not out:Flag(nil, "Conquered") then
+				out:NewMod("EternalYouth", "FLAG", true, data.modSource)
+				out:NewMod("Conquered", "FLAG", true, data.modSource)
+			else
+				out:NewMod("PassiveSkillHasNoEffect", "FLAG", true, data.modSource)
+			end
+			out:NewMod("VaalSeed", "BASE", caps[1])
+		end
+	end,
+	function(node, sd)
+		if node then
+			if node.type == "Keystone" then
+				return {"Eternal Youth"}
+			else
+				local tr = {"[Random modifier]"}
 				return tr
 			end
 		end
@@ -2279,7 +2356,7 @@ local jewelThresholdFuncs = {
 	["With at least 40 Intelligence in Radius, 20% of Glacial Cascade Physical Damage Converted to Cold Damage"] = getThreshold("Int", "SkillPhysicalDamageConvertToCold", "BASE", 20, { type = "SkillName", skillName = "Glacial Cascade" }),
 	["With 40 total Intelligence and Dexterity in Radius, Elemental Hit deals 50% less Fire Damage"] = getThreshold({"Int","Dex"}, "FireDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
 	["With 40 total Strength and Intelligence in Radius, Elemental Hit deals 50% less Cold Damage"] = getThreshold({"Str","Int"}, "ColdDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
-	["With 40 total Dexterity and Strength in Radius, Elemental Hit deals 50% less Lightning Damage"] = getThreshold({"Dex","Str"}, "LightningDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),	
+	["With 40 total Dexterity and Strength in Radius, Elemental Hit deals 50% less Lightning Damage"] = getThreshold({"Dex","Str"}, "LightningDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
 	["With 40 total Intelligence and Dexterity in Radius, Elemental Hit and Wild Strike deal 50% less Fire Damage"] = getThreshold({"Int","Dex"}, "FireDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
 	["With 40 total Strength and Intelligence in Radius, Elemental Hit and Wild Strike deal 50% less Cold Damage"] = getThreshold({"Str","Int"}, "ColdDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
 	["With 40 total Dexterity and Strength in Radius, Elemental Hit and Wild Strike deal 50% less Lightning Damage"] = getThreshold({"Dex","Str"}, "LightningDamage", "MORE", -50, { type = "SkillName", skillNameList = { "Elemental Hit", "Wild Strike" } }),
@@ -2319,6 +2396,9 @@ local function scan(line, patternList, plain)
 	for pattern, patternVal in pairs(patternList) do
 		local index, endIndex, cap1, cap2, cap3, cap4, cap5 = lineLower:find(pattern, 1, plain)
 		if index and (not bestIndex or index < bestIndex or (index == bestIndex and (endIndex > bestEndIndex or (endIndex == bestEndIndex and #pattern > #bestPattern)))) then
+			if lineLower == "50% less life regeneration rate" then
+				ConPrintf("%s", pattern)
+			end
 			bestIndex = index
 			bestEndIndex = endIndex
 			bestPattern = pattern
@@ -2335,10 +2415,10 @@ local function scan(line, patternList, plain)
 	end
 end
 
-local function parseMod(line, order, debug)
+local function parseMod(line, order, debugf)
 	-- Check if this is a special modifier
 	local lineLower = line:lower()
-	if debug then
+	if debugf then
 		ConPrintf("PARSEMOD> %s", line)
 	end
 	local bestVal, _, bestCaps = scan(line, jewelFuncList)
@@ -2407,6 +2487,9 @@ local function parseMod(line, order, debug)
 
 	-- Scan for modifier name and skill name
 	local modName
+	if debugf then
+		ConPrintf("PARSEMOD MODNAME> %s", line)
+	end
 	if order == 2 and not skillTag then
 		skillTag, line = scan(line, skillNameList, true)
 	end
@@ -2419,6 +2502,9 @@ local function parseMod(line, order, debug)
 		_, line = scan(line, modNameList, true)
 	else
 		modName, line = scan(line, modNameList, true)
+		if debugf then
+			ConPrintf("PARSEMOD MODNAME:> %s | %s", modName, line)
+		end
 	end
 	if order == 1 and not skillTag then
 		skillTag, line = scan(line, skillNameList, true)
