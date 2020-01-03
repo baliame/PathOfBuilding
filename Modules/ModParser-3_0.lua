@@ -1009,6 +1009,8 @@ end
 -- List of special modifiers
 local specialModList = {
 	-- Keystones
+	["you can inflict bleeding on an enemy up to (%d+) times"] = function(num) return { mod("MaxBleedStacks", "OVERRIDE", num) } end,
+	["you can inflict an additional bleed on an enemy"] = { mod("MaxBleedStacks", "BASE", 1) },
 	["your hits can't be evaded"] = { flag("CannotBeEvaded") },
 	["never deal critical strikes"] = { flag("NeverCrit") },
 	["no critical strike multiplier"] = { flag("NoCritMultiplier") },

@@ -22,6 +22,7 @@ local historicKeystones = {
 
 -- Initialise modifier database with stats and conditions common to all actors
 function calcs.initModDB(env, modDB)
+	modDB:NewMod("MaxBleedStacks", "BASE", 1, "Base")
 	modDB:NewMod("FireResistMax", "BASE", 75, "Base")
 	modDB:NewMod("ColdResistMax", "BASE", 75, "Base")
 	modDB:NewMod("LightningResistMax", "BASE", 75, "Base")

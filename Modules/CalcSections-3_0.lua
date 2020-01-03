@@ -525,6 +525,8 @@ return {
 		{ label = "Main Hand", flag = "weapon1Attack", modName = "BleedChance", modType = "BASE", cfg = "weapon1" },
 		{ label = "Off Hand", flag = "weapon2Attack", modName = "BleedChance", modType = "BASE", cfg = "weapon2" },
 	}, },
+	{ label = "Max # of bleeds", { format = "{0:output:MaxBleedStacks}", { breakdown = "MaxBleedStacks" }, }, },
+	{ label = "# of bleeds", { format = "{2:output:BleedStacks}", { breakdown = "BleedStacks" }, }, },
 	{ label = "Total Increased", { format = "{0:mod:1}%", { modName = { "Damage", "PhysicalDamage" }, modType = "INC", cfg = "bleed" }, }, },
 	{ label = "Total More", { format = "{0:mod:1}%", { modName = { "Damage", "PhysicalDamage" }, modType = "MORE", cfg = "bleed" }, }, },
 	{ label = "MH Source Physical", bgCol = colorCodes.MAINHANDBG, textSize = 12, flag = "weapon1Attack", { format = "{0:output:MainHand.BleedPhysicalMin} to {0:output:MainHand.BleedPhysicalMax}", { breakdown = "MainHand.BleedPhysical" }, }, },

@@ -1439,6 +1439,7 @@ function calcs.offence(env, actor, activeSkill)
 	end
 
 	skillFlags.bleed = false
+	output.MaxBleedStacks = skillModList:Override(nil, "MaxBleedStacks") or skillModList:Sum("BASE", nil, "MaxBleedStacks")
 	skillFlags.poison = false
 	skillFlags.ignite = false
 	skillFlags.igniteCanStack = skillModList:Flag(skillCfg, "IgniteCanStack")
@@ -1648,7 +1649,6 @@ function calcs.offence(env, actor, activeSkill)
 				local mult = skillModList:Sum("BASE", dotCfg, "PhysicalDotMultiplier", "BleedMultiplier")
 				local effectMod = calcLib.mod(skillModList, dotCfg, "AilmentEffect")
 				local rateMod = calcLib.mod(skillModList, cfg, "BleedFaster")
-				output.BleedDPS = baseVal * effectMod * rateMod * effMult
 				local durationBase
 				if skillData.bleedDurationIsSkillDuration then
 					durationBase = skillData.duration
@@ -1657,6 +1657,20 @@ function calcs.offence(env, actor, activeSkill)
 				end
 				local durationMod = calcLib.mod(skillModList, dotCfg, "EnemyBleedDuration", "SkillAndDamagingAilmentDuration", skillData.bleedIsSkillEffect and "Duration" or nil) * calcLib.mod(enemyDB, nil, "SelfBleedDuration")
 				globalOutput.BleedDuration = durationBase * durationMod / rateMod * debuffDurationMult
+				local stackCount = m_min((globalOutput.HitSpeed or globalOutput.Speed) * output.BleedChanceOnHit / 100 * output.HitChance / 100 * globalOutput.BleedDuration, globalOutput.MaxBleedStacks)
+				globalOutput.BleedStacks = stackCount
+
+				output.BleedDPS = baseVal * effectMod * rateMod * stackCount * effMult
+				if globalBreakdown then
+					globalBreakdown.BleedStacks = {}
+					t_insert(globalBreakdown.BleedStacks, s_format("1"))
+					t_insert(globalBreakdown.BleedStacks, s_format("x %.2f ^8(hit rate)", (globalOutput.HitSpeed or globalOutput.Speed)))
+					t_insert(globalBreakdown.BleedStacks, s_format("x %.2f ^8(chance to bleed on hit)", output.BleedChanceOnHit / 100))
+					t_insert(globalBreakdown.BleedStacks, s_format("x %.2f ^8(chance to hit)", output.HitChance / 100))
+					t_insert(globalBreakdown.BleedStacks, s_format("x %.2f ^8(bleed duration)", globalOutput.BleedDuration))
+					t_insert(globalBreakdown.BleedStacks, s_format("= %.2f ^8(capped at %.0f)", globalOutput.BleedStacks, globalOutput.MaxBleedStacks))
+				end
+
 				if breakdown then
 					t_insert(breakdown.BleedDPS, s_format("x %.2f ^8(bleed deals %d%% per second)", basePercent/100, basePercent))
 					if effectMod ~= 1 then
@@ -1664,6 +1678,9 @@ function calcs.offence(env, actor, activeSkill)
 					end
 					if output.RuthlessBlowEffect ~= 0 then
 						t_insert(breakdown.BleedDPS, s_format("x %.2f ^8(ruthless blow effect modifier)", output.RuthlessBlowEffect))
+					end
+					if globalOutput.BleedStacks ~= 1 then
+						t_insert(breakdown.BleedDPS, s_format("x %.2f ^8(average number of active bleed stacks)", globalOutput.BleedStacks))
 					end
 					t_insert(breakdown.BleedDPS, s_format("= %.1f", baseVal))
 					breakdown.multiChain(breakdown.BleedDPS, {
